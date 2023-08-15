@@ -13,7 +13,9 @@ connectDB();
 
 const app = express();
 
-app.use(cors)
+app.use(cors({
+    origin: 'https://invoice-withdb.vercel.app'
+}));
 
 app.use(express.json());
 
