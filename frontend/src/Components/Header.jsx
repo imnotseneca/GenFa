@@ -21,6 +21,7 @@ export default function Header() {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout());
+      localStorage.remove('userInfo')
       navigate("/");
     } catch (error) {
       console.log(error);
