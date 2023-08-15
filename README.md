@@ -1,2 +1,2 @@
 # Invoice-withdb
-Fullstack invoice App
+Fullstack invoice App for CeCH
