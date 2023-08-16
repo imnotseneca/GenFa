@@ -29,7 +29,7 @@ export default function Header() {
   return (
     <header>
       <Navbar bg="dark" data-bs-theme="dark" expand="lg" collapseOnSelect>
-        <Container style={{ width: "min(90%,70.5rem)" }}>
+        <Container style={{width: 'min(90%,70.5rem)'}}>
           <Navbar.Brand className="logo" href="/" style={{ padding: "8px" }}>
             GenFa💸
           </Navbar.Brand>
@@ -42,8 +42,8 @@ export default function Header() {
                     title={`${userInfo.firstName} ${userInfo.lastName}`}
                     id="username"
                     style={{
-                      width: "100%",
-                      fontWeight: "bold",
+                      width: '100%',
+                      fontWeight: 'bold'
                     }}
                   >
                     <Container fluid className="d-flex align-items-center">
@@ -55,7 +55,7 @@ export default function Header() {
                     <hr />
                     <Container fluid className="d-flex align-items-center">
                       <BiLogOut size={28} />
-                      <NavDropdown.Item href="/" prefetch={false} onClick={handleLogout}>
+                      <NavDropdown.Item href="/" onClick={handleLogout}>
                         <Navbar.Text>Deslogear</Navbar.Text>
                       </NavDropdown.Item>
                     </Container>
