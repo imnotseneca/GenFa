@@ -19,7 +19,7 @@ export default function Dashboard() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
+        "https://genfa.onrender.com/api/v1/invoices",
         axiosConfig
       );
       setInvoices([...response.data]);
@@ -32,7 +32,7 @@ export default function Dashboard() {
     try {
       await axios
         .put(
-          `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`,
+          `https://genfa.onrender.com/api/v1/invoices/${id}`,
           axiosConfig,
           { status: `Pago` }
         )
@@ -54,7 +54,7 @@ export default function Dashboard() {
   const handleDeleteInvoice = async (id) => {
     try {
       await axios.delete(
-        `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`,
+        `https://genfa.onrender.com/api/v1/invoices/${id}`,
         axiosConfig
       );
       // Remove the deleted invoice from the frontend
@@ -70,7 +70,7 @@ export default function Dashboard() {
   const handlePostInvoice = async (newInvoice) => {
     try {
       const response = await axios.post(
-        "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
+        "https://genfa.onrender.com/api/v1/invoices",
         axiosConfig,
         newInvoice
       );
