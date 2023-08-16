@@ -7,7 +7,6 @@ const handleProtection = asyncHandler(async (req, res, next) => {
 
   token = req.cookies.jwt;
 
-  console.log(token)
 
   if (token) {
     try {
