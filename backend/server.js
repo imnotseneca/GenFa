@@ -17,6 +17,8 @@ const app = express();
 app.use(
   cors({
     origin: "https://invoice-withdb.vercel.app",
+    credentials: true,
+    exposedHeaders: ["set-cookie"]
   })
 );
 

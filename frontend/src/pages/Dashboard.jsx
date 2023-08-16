@@ -6,6 +6,13 @@ import axios from "axios";
 import { toast } from "react-toastify";
 
 export default function Dashboard() {
+
+  const axiosConfig = {
+    headers: {
+      "Content-Type": "application/json"
+      },
+      withCredentials: true
+    }
   const [invoices, setInvoices] = useState([]);
 
   //IMPLEMENT INVOICES.STATE TO REDUX TO AVOID REPEATED CALLS TO SERVER AND DB.
@@ -13,7 +20,7 @@ export default function Dashboard() {
     try {
       const response = await axios.get(
         "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
-        { withCredentials: true }
+        axiosConfig
       );
       setInvoices([...response.data]);
     } catch (error) {
@@ -26,7 +33,7 @@ export default function Dashboard() {
       await axios
         .put(
           `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`,
-          { withCredentials: true },
+          axiosConfig,
           { status: `Pago` }
         )
         .then((res) => {
@@ -48,7 +55,7 @@ export default function Dashboard() {
     try {
       await axios.delete(
         `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`,
-        { withCredentials: true }
+        axiosConfig
       );
       // Remove the deleted invoice from the frontend
       setInvoices((prevInvoices) =>
@@ -64,7 +71,7 @@ export default function Dashboard() {
     try {
       const response = await axios.post(
         "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
-        { withCredentials: true },
+        axiosConfig,
         newInvoice
       );
       setInvoices((prevInvoices) => [...prevInvoices, response.data]); // Update state with new invoice
