@@ -16,7 +16,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://invoice-withdb.vercel.app/",
+    origin: "https://invoice-withdb.vercel.app",
   })
 );
 
