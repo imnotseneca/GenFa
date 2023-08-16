@@ -8,7 +8,7 @@ export default defineConfig({
     port: 3030,
     proxy: {
       '/api': {
-        target: 'http://localhost:3030',
+        target: 'https://invoice-withdb.vercel.app/',
         changeOrigin: true,
       }
     }
