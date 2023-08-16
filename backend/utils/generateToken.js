@@ -9,12 +9,13 @@ const generateToken = (res, userId) => {
   
   console.log(`jwt token: ${token}`)
 
-  res.cookie("jwt", token, {
-    secure: true,
-    httpOnly: true,
-    sameSite: "none",
-    maxAge: 30 * 24 * 60 * 60 * 1000,
-  });
+  localStorage.setItem('jwt', token)
+  // res.cookie("jwt", token, {
+  //   secure: true,
+  //   httpOnly: true,
+  //   sameSite: "none",
+  //   maxAge: 30 * 24 * 60 * 60 * 1000,
+  // });
 };
 
 export default generateToken;

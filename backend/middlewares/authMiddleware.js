@@ -5,9 +5,9 @@ import User from "../models/userModel.js";
 const handleProtection = asyncHandler(async (req, res, next) => {
   let token;
 
-  token = req.cookies.jwt
+  token = localStorage.getItem('jwt')
 
-  console.log(`cookies.jwt: ${req}`)
+  console.log(`token: ${token}`)
 
   if (token) {
     try {
