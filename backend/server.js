@@ -16,7 +16,7 @@ const app = express();
 
 app.use(
   cors({
-    origin: "https://invoice-withdb-bl7o-dev.fl0.io",
+    origin: "https://invoice-withdb.vercel.app",
   })
 );
 
