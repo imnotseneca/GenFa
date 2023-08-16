@@ -19,7 +19,12 @@ app.use(
     origin: "https://invoice-withdb.vercel.app",
     methods: ['POST', 'PUT', 'GET', 'DELETE'],
     credentials: true,
-    exposedHeaders: ["set-cookie"]
+    exposedHeaders: ["set-cookie"],
+    allowedHeaders: [
+      'Access-Control-Allow-Origin',
+      'Content-type',
+      'Authorization'
+    ]
   })
 );
 

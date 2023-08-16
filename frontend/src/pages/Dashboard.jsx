@@ -19,7 +19,7 @@ export default function Dashboard() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://genfa.onrender.com/api/v1/invoices",
+        "https://genfa.onrender.com/api/v1/invoices", null,
         axiosConfig
       );
       setInvoices([...response.data]);
@@ -32,7 +32,7 @@ export default function Dashboard() {
     try {
       await axios
         .put(
-          `https://genfa.onrender.com/api/v1/invoices/${id}`,
+          `https://genfa.onrender.com/api/v1/invoices/${id}`, null,
           axiosConfig,
           { status: `Pago` }
         )
