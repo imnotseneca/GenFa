@@ -55,24 +55,6 @@ const setInvoice = asyncHandler(async (req, res) => {
       quantity: req.body.quantity,
       price: req.body.price,
     });
-
-    // if(user) {
-    //   if(req.body.reason.toLowerCase() === 'multa') {
-    //     user.penalties.push({
-    //       reason: req.body.reason,
-    //       description: req.body.description,
-    //       amount: req.body.price
-    //     })
-    //   }
-    //   if(req.body.reason.toLowerCase() === 'cuota') {
-    //     user.dues.push({
-    //       reason: req.body.reason,
-    //       description: req.body.description,
-    //       amount: req.body.price
-    //     })
-    //   }
-    // }
-    // const updatedUser = await user.save();
   
     res.status(200).json(invoice);
   });
