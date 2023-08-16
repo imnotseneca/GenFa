@@ -5,26 +5,29 @@ import User from "../models/userModel.js";
 const handleProtection = asyncHandler(async (req, res, next) => {
   let token;
 
-  token = localStorage.getItem('jwt')
-
-  console.log(`token: ${token}`)
-
-  if (token) {
+  if (
+    req.headers.authorization &&
+    req.headers.authorization.startsWith('Bearer')
+  ) {
     try {
+      // Get token from header
+      token = req.headers.authorization.split(" ")[1];
+
+      // Verify token
       const decoded = jwt.verify(token, process.env.JWT_SECRET);
-
-      req.user = await User.findById(decoded.userId).select("-password");
-
+      // Get user from the token
+      req.user = await User.findById(decoded.id).select("-password");
+      
       next();
-
     } catch (error) {
+      console.log(error);
       res.status(401);
-
-      throw new Error("Acceso denegado, token inválido.");
+      throw new Error("Not authorized");
     }
-  } else {
+  }
+  if(!token) {
     res.status(401);
-    throw new Error('Acceso denegado, no se encontró token de acceso.')
+    throw new Error('Invalid token. Permission denied.')
   }
 });
 

@@ -2,20 +2,10 @@ import jwt from "jsonwebtoken";
 
 //It will receive the response and the  userId cauase we need to add the userId to the payload from jwt.
 
-const generateToken = (res, userId) => {
-  const token = jwt.sign({ userId }, process.env.JWT_SECRET, {
+const generateToken = (id) => {
+  return jwt.sign({ id }, process.env.JWT_SECRET, {
     expiresIn: "30d",
   });
-  
-  console.log(`jwt token: ${token}`)
-
-  localStorage.setItem('jwt', token)
-  // res.cookie("jwt", token, {
-  //   secure: true,
-  //   httpOnly: true,
-  //   sameSite: "none",
-  //   maxAge: 30 * 24 * 60 * 60 * 1000,
-  // });
 };
 
 export default generateToken;
