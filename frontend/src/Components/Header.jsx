@@ -55,7 +55,7 @@ export default function Header() {
                     <hr />
                     <Container fluid className="d-flex align-items-center">
                       <BiLogOut size={28} />
-                      <NavDropdown.Item href="/" onClick={handleLogout}>
+                      <NavDropdown.Item href="/" prefetch={false} onClick={handleLogout}>
                         <Navbar.Text>Deslogear</Navbar.Text>
                       </NavDropdown.Item>
                     </Container>
