@@ -12,7 +12,7 @@ import { handleProtection } from "../middlewares/authMiddleware.js";
 router.post("/", registerUser);
 router.post("/auth", authUser);
 router.post("/logout", logoutUser);
-router.get("/profile", handleProtection, getUserProfile);
-router.put("/profile", handleProtection, updateUserProfile);
+router.get("/profile",  getUserProfile);
+router.put("/profile",  updateUserProfile);
 
 export default router;

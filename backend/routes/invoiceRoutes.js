@@ -11,9 +11,9 @@ const router = express.Router();
 
 import { handleProtection } from "../middlewares/authMiddleware.js";
 
-router.get("/", handleProtection, getInvoices);
-router.post("/", handleProtection, setInvoice);
-router.put("/:id", handleProtection, updateInvoice);
-router.delete("/:id", handleProtection, deleteInvoice);
+router.get("/",  getInvoices);
+router.post("/",  setInvoice);
+router.put("/:id",  updateInvoice);
+router.delete("/:id",  deleteInvoice);
 
 export default router;
