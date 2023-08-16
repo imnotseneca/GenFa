@@ -5,10 +5,10 @@ import react from '@vitejs/plugin-react'
 export default defineConfig({
   plugins: [react()],
   server: {
-    port: 3000,
+    port: 3030,
     proxy: {
       '/api': {
-        target: 'https://invoice-withdb-bl7o-dev.fl0.io/',
+        target: 'http://localhost:3030',
         changeOrigin: true,
       }
     }
