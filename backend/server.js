@@ -7,10 +7,25 @@ import connectDB from "./config/db.js";
 const port = process.env.PORT || 5000;
 import userRoutes from "./routes/userRoutes.js";
 import invoiceRoutes from "./routes/invoiceRoutes.js";
+import cors from "cors";
 
 connectDB();
 
 const app = express();
+
+app.use(
+  cors({
+    origin:  "http://localhost:3000/",
+    methods: ["POST", "PUT", "GET", "DELETE"],
+    credentials: true,
+    exposedHeaders: ["set-cookie"],
+    allowedHeaders: [
+      "Access-Control-Allow-Origin",
+      "Content-type",
+      "Authorization",
+    ],
+  })
+);
 
 app.use(express.json());
 

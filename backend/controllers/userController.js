@@ -6,12 +6,18 @@ import generateToken from "../utils/generateToken.js";
 // @route  POST api/v1/users/auth
 // @acces  Public.
 const authUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName, email, password, career, university } = req.body;
+  const { email, password } = req.body;
 
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPasswords(password))) {
-    generateToken(res, user._id);
+    const token = await generateToken(res, user._id);
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "lax",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
     res.status(201).json({
       _id: user._id,
       firstName: user.firstName,
@@ -50,7 +56,14 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    generateToken(res, user._id);
+    const token = await generateToken(res, user._id);
+    res.cookie("jwt", token, {
+      httpOnly: true,
+      secure: process.env.NODE_ENV !== "development",
+      sameSite: "lax",
+      maxAge: 30 * 24 * 60 * 60 * 1000,
+    });
+
     res.status(201).json({
       _id: user._id,
       firstName: user.firstName,
@@ -71,7 +84,6 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const logoutUser = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", {
-    httpOnly: true,
     expires: new Date(0),
   });
 
