@@ -9,7 +9,8 @@ import jwt from "jsonwebtoken";
 // @access  Private
 const getInvoices = asyncHandler(async (req, res) => {
   
-  let token = req.headers.cookie
+  let token = req.cookies.jwt
+  console.log(token)
 
   const decoded = jwt.verify(token.substring(4), process.env.JWT_SECRET);
 
