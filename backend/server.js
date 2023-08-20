@@ -5,17 +5,36 @@ import cookieParser from "cookie-parser";
 import { notFound, errorHandler } from "./middlewares/errorMiddleware.js";
 import connectDB from "./config/db.js";
 const port = process.env.PORT || 5000;
+import cors from "cors";
+// const { auth } = require("express-oauth2-jwt-bearer");
+// import guard from "express-jwt-permissions";
 import userRoutes from "./routes/userRoutes.js";
 import invoiceRoutes from "./routes/invoiceRoutes.js";
-import cors from "cors";
-
+import { createProxyMiddleware } from "http-proxy-middleware";
 connectDB();
 
 const app = express();
 
+// const jwtCheck = auth({
+//   audience: "https://genfa-api.com",
+//   issuerBaseURL: "https://dev-srdr08y4lab1swyl.us.auth0.com/",
+//   tokenSigningAlg: "RS256",
+// });
+
+// app.use(jwtCheck);
+
+app.use(
+  "/api", // Proxy specific routes
+  createProxyMiddleware({
+    target: "https://genfa.onrender.com", // Backend server URL
+    changeOrigin: true, // Change the origin of the request
+    cookieDomainRewrite: "", // Optionally rewrite cookie domains
+  })
+);
+
 app.use(
   cors({
-    origin:  "http://localhost:3000",
+    origin: "http://localhost:3000",
     methods: ["POST", "PUT", "GET", "DELETE"],
     credentials: true,
     exposedHeaders: ["set-cookie"],

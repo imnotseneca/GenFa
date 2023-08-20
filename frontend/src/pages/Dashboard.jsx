@@ -11,7 +11,7 @@ export default function Dashboard() {
   //IMPLEMENT INVOICES.STATE TO REDUX TO AVOID REPEATED CALLS TO SERVER AND DB.
   const fetchData = async () => {
     try {
-      const response = await axios.get("https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices");
+      const response = await axios.get("https://genfa.onrender.com/api/v1/invoices");
       setInvoices([...response.data]);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -21,7 +21,7 @@ export default function Dashboard() {
   const handleUpdateInvoice = async (id) => {
     try {
       await axios
-        .put(`https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`, { status: `Pago` })
+        .put(`https://genfa.onrender.com/api/v1/invoices/${id}`, { status: `Pago` })
         .then((res) => {
           // Handle the updated invoice in the frontend, for example, update the state.
           const updatedInvoice = res.data;
@@ -39,7 +39,7 @@ export default function Dashboard() {
 
   const handleDeleteInvoice = async (id) => {
     try {
-      await axios.delete(`https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`);
+      await axios.delete(`https://genfa.onrender.com/api/v1/invoices/${id}`);
       // Remove the deleted invoice from the frontend
       setInvoices((prevInvoices) =>
         prevInvoices.filter((invoice) => invoice._id !== id)
@@ -53,7 +53,7 @@ export default function Dashboard() {
   const handlePostInvoice = async (newInvoice) => {
     try {
       const response = await axios.post(
-        "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
+        "https://genfa.onrender.com/api/v1/invoices",
         newInvoice
       );
       setInvoices((prevInvoices) => [...prevInvoices, response.data]); // Update state with new invoice
