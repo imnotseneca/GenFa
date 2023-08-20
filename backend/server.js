@@ -10,7 +10,6 @@ import cors from "cors";
 // import guard from "express-jwt-permissions";
 import userRoutes from "./routes/userRoutes.js";
 import invoiceRoutes from "./routes/invoiceRoutes.js";
-import { createProxyMiddleware } from "http-proxy-middleware";
 connectDB();
 
 const app = express();
@@ -23,14 +22,6 @@ const app = express();
 
 // app.use(jwtCheck);
 
-app.use(
-  "/api", // Proxy specific routes
-  createProxyMiddleware({
-    target: "https://genfa.onrender.com", // Backend server URL
-    changeOrigin: true, // Change the origin of the request
-    cookieDomainRewrite: "", // Optionally rewrite cookie domains
-  })
-);
 
 app.use(
   cors({
@@ -55,7 +46,7 @@ app.use(cookieParser());
 app.use("/api/v1/users", userRoutes);
 app.use("/api/v1/invoices", invoiceRoutes);
 
-app.get("/", (req, res) => res.send("Server is ready bro."));
+app.get("/", (req, res) => res.json("Server is ready bro."));
 
 app.use(notFound);
 app.use(errorHandler);
