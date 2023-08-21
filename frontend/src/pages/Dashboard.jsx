@@ -12,9 +12,7 @@ export default function Dashboard() {
   //IMPLEMENT INVOICES.STATE TO REDUX TO AVOID REPEATED CALLS TO SERVER AND DB.
   const fetchData = async () => {
     try {
-      const response = await axios.get(
-        "https://genfa.vercel.app/api/v1/invoices"
-      );
+      const response = await axios.get("https://genfa.vercel.app/api/v1/invoices");
       setInvoices([...response.data]);
     } catch (error) {
       console.error("Error fetching data:", error);
@@ -24,9 +22,7 @@ export default function Dashboard() {
   const handleUpdateInvoice = async (id) => {
     try {
       await axios
-        .put(`https://genfa.vercel.app/api/v1/invoices/${id}`, {
-          status: `Pago`,
-        })
+        .put(`https://genfa.vercel.app/api/v1/invoices/${id}`, { status: `Pago` })
         .then((res) => {
           // Handle the updated invoice in the frontend, for example, update the state.
           const updatedInvoice = res.data;
