@@ -11,7 +11,8 @@
     "start": "node server.js",
     "server": "nodemon server.js",
     "client": "npm run dev --prefix ../frontend",
-    "dev": "concurrently \"npm run server \" \"npm run client\""
+    "dev": "concurrently \"npm run server \" \"npm run client\"",
+    "vercel-build": "echo hello"
   },
   "repository": {
     "type": "git",
