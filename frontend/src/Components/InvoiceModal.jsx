@@ -53,7 +53,7 @@ export default function InvoiceModal(props) {
         style={{ padding: "0" }}
       >
         <Container className="bg-light p-0 d-flex justify-content-end">
-          <Button className="btn" onClick={props.closeModal}>
+          <Button className="btn outline-dark" onClick={props.closeModal}>
             <GrClose />
           </Button>
         </Container>
@@ -178,7 +178,7 @@ export default function InvoiceModal(props) {
                 Descargar copia
               </Button>
             </Col>
-            <Col md={4}>
+            {/* <Col md={4}>
               <Button
                 variant="primary"
                 className="d-block w-100 my-1"
@@ -203,7 +203,7 @@ export default function InvoiceModal(props) {
                 />
                 Enivar&nbsp;por&nbsp;Wpp
               </Button>
-            </Col>
+            </Col> */}
           </Row>
         </div>
       </Modal>
