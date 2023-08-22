@@ -71,14 +71,14 @@ const registerUser = asyncHandler(async (req, res) => {
 // @route  POST api/v1/users/logout
 // @acces  Public.
 
-const logoutUser = asyncHandler(async (req, res) => {
-  const { firstName, lastName } = req.body;
-  if (firstName && lastName) {
-    res.status(200).json({ message: `Adios ${firstName} ${lastName}` });
-  } else {
-    res.status(200).json({ message: `Usuario deslogeado` });
-  }
-});
+// const logoutUser = asyncHandler(async (req, res) => {
+//   const { firstName, lastName } = req.body;
+//   if (firstName && lastName) {
+//     res.status(200).json({ message: `Adios ${firstName} ${lastName}` });
+//   } else {
+//     res.status(200).json({ message: `Usuario deslogeado` });
+//   }
+// });
 
 // @desc   Get user profile
 // @route  GET api/v1/users/profile

@@ -5,9 +5,9 @@ import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
 import { NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
+// import { useLogoutMutation } from "../features/auth/usersApiSlice";
 import { logout } from "../features/auth/authSlice";
 import { useNavigate } from "react-router-dom";
-import axios from "axios";
 
 export default function Header() {
   const { userInfo } = useSelector((state) => state.auth);
@@ -15,24 +15,21 @@ export default function Header() {
   const dispatch = useDispatch();
   const navigate = useNavigate();
 
+  // const [logoutApiCall] = useLogoutMutation();
+
   const handleLogout = async () => {
     try {
-      const response = await axios.post("/api/v1/users/logout");
-
-      if (response.status === 200) {
-        dispatch(logout());
-        navigate("/");
-      } else {
-        console.log("Logout failed:", response.statusText);
-      }
+      // await logoutApiCall().unwrap();
+      dispatch(logout(userInfo));
+      navigate("/");
     } catch (error) {
-      console.log("Logout error:", error);
+      console.log(error);
     }
   };
   return (
     <header>
       <Navbar bg="dark" data-bs-theme="dark" expand="lg" collapseOnSelect>
-        <Container style={{ width: "min(90%,70.5rem)" }}>
+        <Container style={{width: 'min(90%,70.5rem)'}}>
           <Navbar.Brand className="logo" href="/" style={{ padding: "8px" }}>
             GenFa💸
           </Navbar.Brand>
@@ -45,8 +42,8 @@ export default function Header() {
                     title={`${userInfo.firstName} ${userInfo.lastName}`}
                     id="username"
                     style={{
-                      width: "100%",
-                      fontWeight: "bold",
+                      width: '100%',
+                      fontWeight: 'bold'
                     }}
                   >
                     <Container fluid className="d-flex align-items-center">
