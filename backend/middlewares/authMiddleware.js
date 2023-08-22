@@ -3,7 +3,7 @@ import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 
 const handleProtection = asyncHandler(async (req, res, next) => {
-  const authHeader = req.body.token
+  const authHeader = req.headers.authorization;
 
   if (authHeader) {
     const token = authHeader;
