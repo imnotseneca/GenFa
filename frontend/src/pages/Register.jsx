@@ -17,6 +17,7 @@ export default function Register() {
     university: "",
     password: "",
     confirmPassword: "",
+    token: ''
   });
 
   const {
@@ -27,6 +28,7 @@ export default function Register() {
     confirmPassword,
     career,
     university,
+    token
   } = formData;
 
   const navigate = useNavigate();
@@ -61,6 +63,7 @@ export default function Register() {
           password,
           career,
           university,
+          token,
         }).unwrap();
         dispatch(setCredentials({ ...res }));
         toast.success('Usuario creado con éxito!')

@@ -4,15 +4,11 @@
   "description": "invoice generator with database",
   "type": "module",
   "main": "server.js",
-  "engines": {
-    "node": "18.x"
-  },
   "scripts": {
-    "start": "node server.js",
-    "server": "nodemon server.js",
-    "client": "npm run dev --prefix ../frontend",
-    "dev": "concurrently \"npm run server \" \"npm run client\"",
-    "vercel-build": "echo hello"
+    "start": "node backend/server.js",
+    "server": "nodemon backend/server.js",
+    "client": "npm run dev --prefix frontend",
+    "dev": "concurrently \"npm run server \" \"npm run client\""
   },
   "repository": {
     "type": "git",

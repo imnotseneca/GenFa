@@ -40,6 +40,8 @@ export default function Register() {
     try {
       const res = await login({ email, password }).unwrap();
       dispatch(setCredentials({ ...res }));
+      const tokenFromResponse = await res.text();
+      console.log(tokenFromResponse)
       navigate("/");
     } catch (err) {
       toast.error(err?.data?.message || err.console.error());

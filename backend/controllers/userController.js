@@ -11,13 +11,7 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPasswords(password))) {
-    const token = await generateToken(res, user._id);
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "none",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
+   const token = generateToken(res, user._id);
     res.status(201).json({
       _id: user._id,
       firstName: user.firstName,
@@ -25,6 +19,8 @@ const authUser = asyncHandler(async (req, res) => {
       email: user.email,
       career: user.career,
       university: user.university,
+      token: token,
+
     });
   } else {
     res.status(401);
@@ -56,14 +52,7 @@ const registerUser = asyncHandler(async (req, res) => {
   });
 
   if (user) {
-    const token = await generateToken(res, user._id);
-    res.cookie("jwt", token, {
-      httpOnly: true,
-      secure: process.env.NODE_ENV !== "development",
-      sameSite: "lax",
-      maxAge: 30 * 24 * 60 * 60 * 1000,
-    });
-
+    const token = generateToken(res, user._id);
     res.status(201).json({
       _id: user._id,
       firstName: user.firstName,
@@ -71,6 +60,7 @@ const registerUser = asyncHandler(async (req, res) => {
       email: user.email,
       career: user.career,
       university: user.university,
+      token: token,
     });
   } else {
     res.status(400);
@@ -84,6 +74,7 @@ const registerUser = asyncHandler(async (req, res) => {
 
 const logoutUser = asyncHandler(async (req, res) => {
   res.cookie("jwt", "", {
+    httpOnly: true,
     expires: new Date(0),
   });
 

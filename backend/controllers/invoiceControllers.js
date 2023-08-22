@@ -9,10 +9,9 @@ import jwt from "jsonwebtoken";
 // @access  Private
 const getInvoices = asyncHandler(async (req, res) => {
   
-  let token = req.cookies.jwt
-  console.log(token)
+  let token = req.headers.authorization
 
-  const decoded = jwt.verify(token.substring(4), process.env.JWT_SECRET);
+  const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
     const invoice = await Invoice.find({ user: decoded.userId });
   
