@@ -2,14 +2,13 @@
 import "bootstrap/dist/css/bootstrap.min.css";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import { BiPaperPlane, BiCloudDownload } from "react-icons/bi";
 import { GrClose } from "react-icons/gr";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { Container } from "react-bootstrap";
+import { Container, Button } from "react-bootstrap";
 
 // jsPDF DOCS - > https://artskydj.github.io/jsPDF/docs/jsPDF.html
 
