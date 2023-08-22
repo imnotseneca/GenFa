@@ -20,7 +20,7 @@ export default function Header() {
   const handleLogout = async () => {
     try {
       await logoutApiCall().unwrap();
-      dispatch(logout(userInfo));
+      dispatch(logout());
       navigate("/");
     } catch (error) {
       console.log(error);
@@ -55,7 +55,7 @@ export default function Header() {
                     <hr />
                     <Container fluid className="d-flex align-items-center">
                       <BiLogOut size={28} />
-                      <NavDropdown.Item href="/logout" onClick={handleLogout}>
+                      <NavDropdown.Item href="/" onClick={handleLogout}>
                         <Navbar.Text>Deslogear</Navbar.Text>
                       </NavDropdown.Item>
                     </Container>
