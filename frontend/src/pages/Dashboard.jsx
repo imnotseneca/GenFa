@@ -15,7 +15,7 @@ export default function Dashboard() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "http://localhost:3000/api/v1/invoices",
+        "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
         {
           headers: {
             Authorization: `${userInfo.token}`,
@@ -32,7 +32,7 @@ export default function Dashboard() {
     try {
       await axios
         .put(
-          `http://localhost:3000/api/v1/invoices/${id}`,
+          `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`,
           { status: `Pago` },
           {
             headers: {
@@ -57,7 +57,7 @@ export default function Dashboard() {
 
   const handleDeleteInvoice = async (id) => {
     try {
-      await axios.delete(`http://localhost:3000/api/v1/invoices/${id}`, {
+      await axios.delete(`https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`, {
         headers: {
           Authorization: `${userInfo.token}`,
         },
@@ -75,7 +75,7 @@ export default function Dashboard() {
   const handlePostInvoice = async (newInvoice) => {
     try {
       const response = await axios.post(
-        "http://localhost:3000/api/v1/invoices",
+        "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
         newInvoice,
         {
           headers: {
