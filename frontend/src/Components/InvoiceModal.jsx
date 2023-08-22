@@ -52,7 +52,7 @@ export default function InvoiceModal(props) {
         style={{ padding: "0" }}
       >
         <Container className="bg-light p-0 d-flex justify-content-end">
-        <CloseButton onClick={props.closeModal}/>
+        <CloseButton aria-label="close button" onClick={props.closeModal} className="p-2"/>
         </Container>
         <div
           id="invoiceCapture"
