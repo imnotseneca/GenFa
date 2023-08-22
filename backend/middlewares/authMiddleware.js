@@ -1,7 +1,7 @@
 import jwt from "jsonwebtoken";
 import asyncHandler from "express-async-handler";
 import CryptoJS from "crypto-js";
-import User from "../models/userModel";
+import User from "../models/userModel.js";
 
 const handleProtection = asyncHandler(async (req, res, next) => {
   const authHeader = req.headers.authorization;
