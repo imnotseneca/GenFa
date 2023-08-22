@@ -4,11 +4,10 @@ import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
-import { BiPaperPlane, BiCloudDownload } from "react-icons/bi";
-import { GrClose } from "react-icons/gr";
+import { BiCloudDownload } from "react-icons/bi";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
-import { Container, Button } from "react-bootstrap";
+import { Container, Button, CloseButton } from "react-bootstrap";
 
 // jsPDF DOCS - > https://artskydj.github.io/jsPDF/docs/jsPDF.html
 
@@ -53,9 +52,7 @@ export default function InvoiceModal(props) {
         style={{ padding: "0" }}
       >
         <Container className="bg-light p-0 d-flex justify-content-end">
-          <Button className="btn outline-dark" onClick={props.closeModal}>
-            <GrClose />
-          </Button>
+        <CloseButton onClick={props.closeModal}/>
         </Container>
         <div
           id="invoiceCapture"
