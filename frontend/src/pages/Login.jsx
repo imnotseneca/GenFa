@@ -44,7 +44,7 @@ export default function Register() {
       console.log(tokenFromResponse)
       navigate("/");
     } catch (err) {
-      toast.error(err?.data?.message || err.console.error());
+      toast.error(err?.data?.message || console.error(err));
     }
   };
   return (
