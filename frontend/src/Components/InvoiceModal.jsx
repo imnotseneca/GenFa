@@ -6,7 +6,7 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import { BiPaperPlane, BiCloudDownload } from "react-icons/bi";
-import { GrClose } from 'react-icons/gr'
+import { GrClose } from "react-icons/gr";
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Container } from "react-bootstrap";
@@ -20,10 +20,10 @@ export default function InvoiceModal(props) {
     reason: props.items[0].name,
     description: props.items[0].description,
     quantity: props.items[0].quantity,
-    price: props.items[0].price
+    price: props.items[0].price,
   };
 
-  const GenerateInvoice = async() => {
+  const GenerateInvoice = async () => {
     html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
       const imgData = canvas.toDataURL("image/png", 1.0);
       const pdf = new jsPDF({
@@ -36,12 +36,13 @@ export default function InvoiceModal(props) {
       const pdfWidth = pdf.internal.pageSize.getWidth();
       const pdfHeight = (imgProps.height * pdfWidth) / imgProps.width;
       pdf.addImage(imgData, "PNG", 0, 0, pdfWidth, pdfHeight);
-      pdf.save(`Factura_${props.info.billTo}_${new Date().toLocaleDateString()}.pdf`);
+      pdf.save(
+        `Factura_${props.info.billTo}_${new Date().toLocaleDateString()}.pdf`
+      );
     });
 
-
-    props.handlePostInvoice(newInvoiceData)
-  }
+    props.handlePostInvoice(newInvoiceData);
+  };
   return (
     <div>
       <Modal
@@ -50,14 +51,17 @@ export default function InvoiceModal(props) {
         aria-labelledby="contained-modal-title-vcenter"
         size="md"
         centered
-        style={{padding: "0"}}
+        style={{ padding: "0" }}
       >
-          <Container className="bg-light">
-            <Button className="btn outline-dark" onClick={props.closeModal}>
-            <GrClose/>
-            </Button>
-          </Container>
-        <div id="invoiceCapture" className="d-flex-md flex-column justify-conte nt-between align-items-start bg-light w-100 p-4">
+        <Container className="bg-light p-0 d-flex justify-content-end">
+          <Button className="btn dark" onClick={props.closeModal}>
+            <GrClose />
+          </Button>
+        </Container>
+        <div
+          id="invoiceCapture"
+          className="d-flex-md flex-column justify-conte nt-between align-items-start bg-light w-100 p-4"
+        >
           <div className="d-flex flex-row justify-conte nt-between align-items-start bg-light w-100 p-4">
             <div className="w-100">
               <h4 className="fw-bold my-2">
@@ -79,8 +83,13 @@ export default function InvoiceModal(props) {
             <Container className="mb-4">
               <Col md={12}>
                 <h5 className="fw-bold">Facturado&nbsp;a:</h5>
-                <p><strong>Nombre:</strong> {props.info.billTo || ""}</p>
-                <p><strong>Dirección de E-mail: </strong>{props.info.billToEmail || ""}</p>
+                <p>
+                  <strong>Nombre:</strong> {props.info.billTo || ""}
+                </p>
+                <p>
+                  <strong>Dirección de E-mail: </strong>
+                  {props.info.billToEmail || ""}
+                </p>
               </Col>
               <Col md={12}>
                 <h5 className="fw-bold">Facturado por:</h5>
