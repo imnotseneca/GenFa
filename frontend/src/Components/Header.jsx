@@ -7,13 +7,11 @@ import { NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../features/auth/usersApiSlice";
 import { logout } from "../features/auth/authSlice";
-import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
-  const navigate = useNavigate();
 
   const [logoutApiCall] = useLogoutMutation();
 
@@ -21,7 +19,6 @@ export default function Header() {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout(userInfo));
-      navigate("/");
     } catch (error) {
       console.log(error);
     }
