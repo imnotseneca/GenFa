@@ -11,7 +11,7 @@ const authUser = asyncHandler(async (req, res) => {
   const user = await User.findOne({ email });
 
   if (user && (await user.matchPasswords(password))) {
-   const token = generateToken(res, user._id);
+    const token = generateToken(res, user._id);
     res.status(201).json({
       _id: user._id,
       firstName: user.firstName,
@@ -20,7 +20,6 @@ const authUser = asyncHandler(async (req, res) => {
       career: user.career,
       university: user.university,
       token: token,
-
     });
   } else {
     res.status(401);
@@ -73,11 +72,6 @@ const registerUser = asyncHandler(async (req, res) => {
 // @acces  Public.
 
 const logoutUser = asyncHandler(async (req, res) => {
-  res.cookie("jwt", "", {
-    httpOnly: true,
-    expires: new Date(0),
-  });
-
   const { firstName, lastName } = req.body;
   if (firstName && lastName) {
     res.status(200).json({ message: `Adios ${firstName} ${lastName}` });

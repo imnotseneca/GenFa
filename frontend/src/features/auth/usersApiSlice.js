@@ -36,7 +36,7 @@ export const usersApiSlice = apiSlice.injectEndpoints({
 
 export const {
   useLoginMutation,
-  useLogoutMutation,
   useRegisterMutation,
+  useLogoutMutation,
   useUpdateProfileMutation,
 } = usersApiSlice;

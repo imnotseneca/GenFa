@@ -20,7 +20,7 @@ export default function Header() {
   const handleLogout = async () => {
     try {
       await logoutApiCall().unwrap();
-      dispatch(logout());
+      dispatch(logout(userInfo));
       navigate("/");
     } catch (error) {
       console.log(error);

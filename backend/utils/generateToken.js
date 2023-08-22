@@ -8,7 +8,6 @@ const generateToken = (res, userId) => {
     expiresIn: "30d",
   });
   
-  console.log(token)
   const encryptedToken = CryptoJS.AES.encrypt(token, process.env.ENCRYPTED_KEY).toString();
 
   return encryptedToken
