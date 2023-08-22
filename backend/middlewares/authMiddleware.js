@@ -16,6 +16,8 @@ const handleProtection = asyncHandler(async (req, res, next) => {
         process.env.ENCRYPTED_KEY
       );
       const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
+      
+      console.log("Decrypted Token:", decryptedToken)
 
       // Verify the decrypted token
       const decoded = jwt.verify(decryptedToken, process.env.JWT_SECRET);
