@@ -6,6 +6,7 @@ import Button from "react-bootstrap/Button";
 import Table from "react-bootstrap/Table";
 import Modal from "react-bootstrap/Modal";
 import { BiPaperPlane, BiCloudDownload } from "react-icons/bi";
+import { AiOutlineCloseSquare } from 'react-icons/ai'
 import html2canvas from "html2canvas";
 import jsPDF from "jspdf";
 import { Container } from "react-bootstrap";
@@ -52,6 +53,11 @@ export default function InvoiceModal(props) {
         style={{padding: "0"}}
       >
         <div id="invoiceCapture" className="d-flex-md flex-column justify-conte nt-between align-items-start bg-light w-100 p-4">
+          <div>
+            <button onClick={props.closeModal}>
+            <AiOutlineCloseSquare/>
+            </button>
+          </div>
           <div className="d-flex flex-row justify-conte nt-between align-items-start bg-light w-100 p-4">
             <div className="w-100">
               <h4 className="fw-bold my-2">
