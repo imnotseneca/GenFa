@@ -7,11 +7,13 @@ import { NavDropdown } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 import { useLogoutMutation } from "../features/auth/usersApiSlice";
 import { logout } from "../features/auth/authSlice";
+import { useNavigate } from "react-router-dom";
 
 export default function Header() {
   const { userInfo } = useSelector((state) => state.auth);
 
   const dispatch = useDispatch();
+  const navigate = useNavigate();
 
   const [logoutApiCall] = useLogoutMutation();
 
@@ -19,6 +21,7 @@ export default function Header() {
     try {
       await logoutApiCall().unwrap();
       dispatch(logout(userInfo));
+      navigate("/");
     } catch (error) {
       console.log(error);
     }
@@ -52,7 +55,7 @@ export default function Header() {
                     <hr />
                     <Container fluid className="d-flex align-items-center">
                       <BiLogOut size={28} />
-                      <NavDropdown.Item href="/" onClick={handleLogout}>
+                      <NavDropdown.Item href="/logout" onClick={handleLogout}>
                         <Navbar.Text>Deslogear</Navbar.Text>
                       </NavDropdown.Item>
                     </Container>
