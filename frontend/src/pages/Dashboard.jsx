@@ -15,7 +15,9 @@ export default function Dashboard() {
   const fetchData = async () => {
     try {
       const response = await axios.get(
-        "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
+        import.meta.env.VITE_APP_ENV === "production"
+          ? "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices"
+          : "http://localhost:8000/api/v1/invoices",
         {
           headers: {
             Authorization: `${userInfo.token}`,
@@ -32,7 +34,9 @@ export default function Dashboard() {
     try {
       await axios
         .put(
-          `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`,
+          import.meta.env.VITE_APP_ENV === "production"
+            ? `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`
+            : `http://localhost:8000/api/v1/invoices/${id}`,
           { status: `Pago` },
           {
             headers: {
@@ -57,11 +61,16 @@ export default function Dashboard() {
 
   const handleDeleteInvoice = async (id) => {
     try {
-      await axios.delete(`https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`, {
-        headers: {
-          Authorization: `${userInfo.token}`,
-        },
-      });
+      await axios.delete(
+        import.meta.env.VITE_APP_ENV === "production"
+          ? `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`
+          : `http://localhost:8000/api/v1/invoices/${id}`,
+        {
+          headers: {
+            Authorization: `${userInfo.token}`,
+          },
+        }
+      );
       // Remove the deleted invoice from the frontend
       setInvoices((prevInvoices) =>
         prevInvoices.filter((invoice) => invoice._id !== id)
@@ -75,7 +84,9 @@ export default function Dashboard() {
   const handlePostInvoice = async (newInvoice) => {
     try {
       const response = await axios.post(
-        "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices",
+        import.meta.env.VITE_APP_ENV === "production"
+          ? "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices"
+          : `http://localhost:8000/api/v1/invoices`,
         newInvoice,
         {
           headers: {

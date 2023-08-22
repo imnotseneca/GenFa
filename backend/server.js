@@ -14,7 +14,7 @@ connectDB();
 const app = express();
 
 const corsOptions = {
-    origin: 'https://genfa.vercel.app',
+    origin: process.env.NODE_ENV = 'production' ? 'https://genfa.vercel.app' : 'http://localhost:3000',
     credentials: true, // Important for sending cookies
   };
 
