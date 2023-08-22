@@ -14,7 +14,7 @@ connectDB();
 const app = express();
 
 const corsOptions = {
-    origin: '',
+    origin: 'https://invoice-withdb.vercel.app/',
     credentials: true, // Important for sending cookies
   };
 
