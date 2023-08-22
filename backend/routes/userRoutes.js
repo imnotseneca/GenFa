@@ -2,7 +2,7 @@ import express from "express";
 import {
   authUser,
   registerUser,
-  logoutUser,
+  // logoutUser,
   getUserProfile,
   updateUserProfile,
 } from "../controllers/userController.js";
