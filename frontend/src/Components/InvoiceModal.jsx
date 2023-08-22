@@ -54,7 +54,7 @@ export default function InvoiceModal(props) {
         style={{ padding: "0" }}
       >
         <Container className="bg-light p-0 d-flex justify-content-end">
-          <Button className="btn dark" onClick={props.closeModal}>
+          <Button className="btn" onClick={props.closeModal}>
             <GrClose />
           </Button>
         </Container>
@@ -62,7 +62,7 @@ export default function InvoiceModal(props) {
           id="invoiceCapture"
           className="d-flex-md flex-column justify-conte nt-between align-items-start bg-light w-100 p-4"
         >
-          <div className="d-flex flex-row justify-conte nt-between align-items-start bg-light w-100 p-4">
+          <div className="d-flex flex-row align-items-center bg-light w-100 p-4">
             <div className="w-100">
               <h4 className="fw-bold my-2">
                 {props.info.billFrom || "John Uberbacher"}
