@@ -55,7 +55,7 @@ function ItemRow(props) {
             name: "name",
             placeholder: "Ej: Cuota/multa",
             value: props.item.name,
-            id: 1,
+            id: props.item.id,
           }}
         />
       </td>
@@ -67,7 +67,7 @@ function ItemRow(props) {
             name: "description",
             placeholder: "Ej: Cuota agosto",
             value: props.item.description,
-            id: 2,
+            id: props.item.id,
           }}
         />
       </td>
@@ -80,7 +80,7 @@ function ItemRow(props) {
             min: 1,
             step: "1",
             value: props.item.quantity,
-            id: 3,
+            id: props.item.id,
           }}
         />
       </td>
@@ -95,7 +95,7 @@ function ItemRow(props) {
             step: "0.01",
             textAlign: "text-end",
             value: props.item.price,
-            id: 4,
+            id: props.item.id,
           }}
         />
       </td>
