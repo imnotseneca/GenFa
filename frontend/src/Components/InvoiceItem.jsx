@@ -75,7 +75,7 @@ function ItemRow(props) {
         <EditableField
           onItemizedItemEdit={props.onItemizedItemEdit}
           cellData={{
-            type: "number",
+            type: "text",
             name: "quantity",
             min: 1,
             step: "1",
@@ -89,7 +89,7 @@ function ItemRow(props) {
           onItemizedItemEdit={props.onItemizedItemEdit}
           cellData={{
             leading: props.currency,
-            type: "number",
+            type: "text",
             name: "price",
             min: 1,
             step: "0.01",
