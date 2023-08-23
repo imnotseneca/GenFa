@@ -191,7 +191,7 @@ export default function Record({
       </Container>
       <Container className="align-self-center w-75 my-2">
         <Form.Group className=" my-2">
-          <Form.Label className="text-white">
+          <Form.Label className="text-white" htmlFor="dateFilter">
             Filtrar por fecha de creación:
           </Form.Label>
           <Form.Control
@@ -199,6 +199,7 @@ export default function Record({
             name="dateFilter"
             value={filters.dateFilter}
             onChange={handleFilterChange}
+            id="dateFilter"
           >
             <option value="">Selecciona una opción:</option>
             <option value="newToOld">Nuevo a viejo</option>
@@ -206,23 +207,25 @@ export default function Record({
           </Form.Control>
         </Form.Group>
         <Form.Group className=" my-2">
-          <Form.Label className="text-white">Filtrar por nombre:</Form.Label>
+          <Form.Label className="text-white" htmlFor="nameFilter">Filtrar por nombre:</Form.Label>
           <Form.Control
             type="text"
             name="nameFilter"
             placeholder="Ej: Bruno Corrao"
             value={filters.nameFilter}
             onChange={handleFilterChange}
+            id="nameFilter"
           />
         </Form.Group>
         <Form.Group className=" my-2">
-          <Form.Label className="text-white">Filtrar por razón:</Form.Label>
+          <Form.Label className="text-white" htmlFor="reasonFilter">Filtrar por razón:</Form.Label>
           <Form.Control
             type="text"
             name="reasonFilter"
             placeholder="Ej: Multa"
             value={filters.reasonFilter}
             onChange={handleFilterChange}
+            id="reasonFilter"
           />
         </Form.Group>
       </Container>
