@@ -149,8 +149,9 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
               <hr className="my-4" />
               <Row className="mb-5">
                 <Col>
-                  <Form.Label className="fw-bold">
+                  <Form.Label className="fw-bold" htmlFor="receptorName">
                     Nombre del receptor:
+                  </Form.Label>
                   <Form.Control
                     placeholder="Ingresa un Nombre"
                     value={state.billTo}
@@ -160,10 +161,11 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
                     onChange={onChange}
                     autoComplete="Nombre"
                     required={true}
-                    ></Form.Control>
-                    </Form.Label>
-                  <Form.Label className="fw-bold">
+                    id="receptorName"
+                  ></Form.Control>
+                  <Form.Label className="fw-bold" htmlFor="receptorEmail">
                     E-mail del receptor:
+                  </Form.Label>
                   <Form.Control
                     placeholder="Ingresa un Email"
                     value={state.billToEmail}
@@ -173,12 +175,13 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
                     onChange={onChange}
                     autoComplete="email"
                     required={true}
-                    ></Form.Control>
-                    </Form.Label>
+                    id="receptorEmail"
+                  ></Form.Control>
                 </Col>
                 <Col>
-                  <Form.Label className="fw-bold">
+                  <Form.Label className="fw-bold" htmlFor="transmitter">
                     Nombre del Emisor:
+                  </Form.Label>
                   <Form.Control
                     placeholder="Ingresa un Nombre"
                     value={state.billFrom}
@@ -188,9 +191,9 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
                     onChange={onChange}
                     autoComplete="Nombre"
                     required={true}
+                    id="transmitter"
                     disabled
-                    ></Form.Control>
-                    </Form.Label>
+                  ></Form.Control>
                 </Col>
               </Row>
               <InvoiceItem

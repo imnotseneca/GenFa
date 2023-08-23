@@ -130,7 +130,7 @@ export default function Profile() {
                   value={firstName}
                   onChange={handleChange}
                 />
-                <label htmlFor="formName">Nombre:</label>
+                <label htmlFor="formFirstName">Nombre:</label>
               </Form.Floating>
               <Form.Floating className="mb-3">
                 <Form.Control
@@ -141,7 +141,7 @@ export default function Profile() {
                   value={lastName}
                   onChange={handleChange}
                 />
-                <label htmlFor="formName">Apellido:</label>
+                <label htmlFor="formLastName">Apellido:</label>
               </Form.Floating>
               <Form.Floating className="mb-3">
                 <Form.Control
@@ -163,7 +163,7 @@ export default function Profile() {
                   value={career}
                   onChange={handleChange}
                 />
-                <label htmlFor="formEmail">Carrera:</label>
+                <label htmlFor="formCareer">Carrera:</label>
               </Form.Floating>
               <Form.Floating className="mb-3">
                 <Form.Control
@@ -174,7 +174,7 @@ export default function Profile() {
                   value={university}
                   onChange={handleChange}
                 />
-                <label htmlFor="formEmail">Universidad:</label>
+                <label htmlFor="formUniversity">Universidad:</label>
               </Form.Floating>
               <Form.Floating className="mb-3">
                 <Form.Control
@@ -196,7 +196,7 @@ export default function Profile() {
                   value={confirmPassword}
                   onChange={handleChange}
                 />
-                <label htmlFor="formPassword">Confirmar contraseña:</label>
+                <label htmlFor="formConfirmPassword">Confirmar contraseña:</label>
               </Form.Floating>
               {isLoading && <Loader />}
               <Button variant="primary" type="submit">
