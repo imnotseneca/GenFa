@@ -12,6 +12,7 @@ import { Container, Button, CloseButton } from "react-bootstrap";
 // jsPDF DOCS - > https://artskydj.github.io/jsPDF/docs/jsPDF.html
 
 export default function InvoiceModal(props) {
+
   const newInvoiceData = {
     invoiceTo: props.info.billTo,
     invoiceFrom: props.info.billFrom,
@@ -19,8 +20,9 @@ export default function InvoiceModal(props) {
     description: props.items[0].description,
     quantity: props.items[0].quantity,
     price: props.items[0].price,
-    receptorID: props.info.receptorID,
+    receptorID: props.info.receptorID
   };
+
 
   const GenerateInvoice = async () => {
     html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
@@ -53,11 +55,7 @@ export default function InvoiceModal(props) {
         style={{ padding: "0" }}
       >
         <Container className="bg-light p-0 d-flex justify-content-end">
-          <CloseButton
-            aria-label="close button"
-            onClick={props.closeModal}
-            className="p-2"
-          />
+        <CloseButton aria-label="close button" onClick={props.closeModal} className="p-2"/>
         </Container>
         <div
           id="invoiceCapture"
@@ -172,8 +170,6 @@ export default function InvoiceModal(props) {
                 variant="outline-primary"
                 className="d-block w-100 my-1"
                 onClick={GenerateInvoice}
-                target="_blank"
-                rel="noopener noreferrer"
               >
                 <BiCloudDownload
                   style={{ width: "16px", height: "16px", marginTop: "-3px" }}
