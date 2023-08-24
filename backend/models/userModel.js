@@ -25,8 +25,8 @@ const userSchema = mongoose.Schema(
     },
     role: {
       type: String,
-      enum: ["user", "admin"],
-      default: "user",
+      enum: ["invoiceMaker", "invoiceReceiver", "admin"],
+      default: "invoiceReceiver",
     },
     profilePicture: {
       type: String,
@@ -120,6 +120,14 @@ const userSchema = mongoose.Schema(
         true,
         "Por favor agrega el nombre de la universidad en la que estás estudiando.",
       ],
+    },
+    phoneNumber: {
+      type: Number,
+      match: [
+        /^54\d{10,}$/,
+        "El formato del número debe empezar con '54' y tener al menos 12 dígitos en total.",
+      ],
+      required: [true, "Por favor agrega tu número de telefono."],
     },
   },
   {

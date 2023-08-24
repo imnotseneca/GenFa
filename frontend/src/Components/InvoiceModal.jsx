@@ -12,6 +12,7 @@ import { Container, Button, CloseButton } from "react-bootstrap";
 // jsPDF DOCS - > https://artskydj.github.io/jsPDF/docs/jsPDF.html
 
 export default function InvoiceModal(props) {
+
   const newInvoiceData = {
     invoiceTo: props.info.billTo,
     invoiceFrom: props.info.billFrom,
@@ -19,7 +20,9 @@ export default function InvoiceModal(props) {
     description: props.items[0].description,
     quantity: props.items[0].quantity,
     price: props.items[0].price,
+    receptorID: props.info.receptorID
   };
+
 
   const GenerateInvoice = async () => {
     html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
@@ -162,7 +165,7 @@ export default function InvoiceModal(props) {
         </div>
         <div className="pb-4 px-4">
           <Row>
-            <Col md={4}>
+            <Col md={12}>
               <Button
                 variant="outline-primary"
                 className="d-block w-100 my-1"

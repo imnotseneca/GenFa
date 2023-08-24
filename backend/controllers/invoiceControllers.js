@@ -26,6 +26,25 @@ const getInvoices = asyncHandler(async (req, res) => {
   res.status(200).json(invoice);
 });
 
+const getReceiverInvoices = asyncHandler(async (req, res) => {
+  let token = req.headers.authorization;
+
+  const encryptedToken = token; // Obtain the encrypted token from the auth header
+
+  // Decrypt the token
+  const decryptedBytes = CryptoJS.AES.decrypt(
+    encryptedToken,
+    process.env.ENCRYPTED_KEY
+  );
+  const decryptedToken = decryptedBytes.toString(CryptoJS.enc.Utf8);
+
+  const decoded = jwt.verify(decryptedToken, process.env.JWT_SECRET);
+
+  const invoice = await Invoice.find({ receptorID: decoded.userId });
+
+  res.status(200).json(invoice);
+});
+
 // @desc    Set invoice
 // @route   POST /api/v1/invoices/
 // @access  Private
@@ -51,6 +70,7 @@ const setInvoice = asyncHandler(async (req, res) => {
     throw new Error("Por favor agrega un precio!");
   }
 
+
   const invoice = await Invoice.create({
     user: req.user.id,
     invoiceTo: req.body.invoiceTo,
@@ -60,6 +80,7 @@ const setInvoice = asyncHandler(async (req, res) => {
     description: req.body.description,
     quantity: req.body.quantity,
     price: req.body.price,
+    receptorID: req.body.receptorID
   });
 
   // if(user) {
@@ -143,4 +164,4 @@ const deleteInvoice = asyncHandler(async (req, res) => {
   res.status(200).json({ id: req.params.id });
 });
 
-export { getInvoices, setInvoice, updateInvoice, deleteInvoice };
+export { getInvoices, setInvoice, updateInvoice, deleteInvoice, getReceiverInvoices };

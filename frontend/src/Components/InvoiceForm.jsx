@@ -13,9 +13,12 @@ import { BsArrowRight } from "react-icons/bs";
 import "../App.css";
 import { Container } from "react-bootstrap";
 
-export default function InvoiceForm({ invoices, handlePostInvoice }) {
+export default function InvoiceForm({
+  invoices,
+  handlePostInvoice,
+  invoiceReceivers,
+}) {
   const { userInfo } = useSelector((state) => state.auth);
-  
 
   const [state, setState] = useState({
     isOpen: false,
@@ -27,6 +30,13 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
     billFrom: `${userInfo.firstName} ${userInfo.lastName}`,
     notes: "",
     subTotal: "",
+    receptorID: "",
+  });
+
+  const [selectedReceiverData, setSelectedReceiverData] = useState({
+    billTo: "",
+    billToEmail: "",
+    receptorID: "",
   });
   const [total, setTotal] = useState(0.0);
   const [items, setItems] = useState([
@@ -39,12 +49,12 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
     },
   ]);
 
-  const onChange = (event) => {
-    setState((state) => ({
-      ...state,
-      [event.target.name]: event.target.value,
-    }));
-  };
+  // const onChange = (event) => {
+  //   setState((state) => ({
+  //     ...state,
+  //     [event.target.name]: event.target.value,
+  //   }));
+  // };
 
   const onItemizedItemEdit = (event) => {
     const individualItem = {
@@ -115,9 +125,42 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
     }));
   };
 
+  const sortedInvoiceReceivers = [...invoiceReceivers].sort((a, b) =>
+    `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
+  );
+
+  const invoiceReceiverList = sortedInvoiceReceivers.map((receiver) => {
+    return (
+      <option value={receiver._id} key={receiver._id}>
+        {receiver.firstName} {receiver.lastName}
+      </option>
+    );
+  });
+
+  function handleSelectOption(e) {
+    const selectedReceiverId = e.target.value; // Use the _id as the value
+    const selectedReceiverData = invoiceReceivers.find(
+      (receiver) => receiver._id === selectedReceiverId
+    );
+  
+    setSelectedReceiverData({
+      billTo: `${selectedReceiverData.firstName} ${selectedReceiverData.lastName}`,
+      billToEmail: selectedReceiverData.email,
+      receptorID: selectedReceiverData._id,
+    });
+  }
+
   useEffect(() => {
+    // Update the form input values with the selectedReceiverData
+    setState((prevFormState) => ({
+      ...prevFormState,
+      billTo: selectedReceiverData.billTo,
+      billToEmail: selectedReceiverData.billToEmail,
+      receptorID: selectedReceiverData.receptorID,
+    }));
+    // Calculate total, etc.
     handeCalculateTotal(items);
-  }, [items]);
+  }, [selectedReceiverData, items]);
 
   return (
     <Container fluid>
@@ -149,6 +192,17 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
               <hr className="my-4" />
               <Row className="mb-5">
                 <Col>
+                  <Form.Label className="fw-bold" htmlFor="receptorOption">
+                    Receptor:
+                  </Form.Label>
+                  <Form.Select
+                    aria-label="Default select example"
+                    id="receptorOption"
+                    onChange={handleSelectOption}
+                  >
+                    <option>Selecciona un receptor:</option>
+                    {invoiceReceiverList}
+                  </Form.Select>
                   <Form.Label className="fw-bold" htmlFor="receptorName">
                     Nombre del receptor:
                   </Form.Label>
@@ -158,7 +212,8 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
                     type="text"
                     name="billTo"
                     className="my-2"
-                    onChange={onChange}
+                    readOnly
+                    disabled
                     autoComplete="Nombre"
                     required={true}
                     id="receptorName"
@@ -172,7 +227,8 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
                     type="text"
                     name="billToEmail"
                     className="my-2"
-                    onChange={onChange}
+                    readOnly
+                    disabled
                     autoComplete="email"
                     required={true}
                     id="receptorEmail"
@@ -188,11 +244,11 @@ export default function InvoiceForm({ invoices, handlePostInvoice }) {
                     type="text"
                     name="billFrom"
                     className="my-2"
-                    onChange={onChange}
+                    readOnly
+                    disabled
                     autoComplete="Nombre"
                     required={true}
                     id="transmitter"
-                    disabled
                   ></Form.Control>
                 </Col>
               </Row>

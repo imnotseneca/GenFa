@@ -7,6 +7,7 @@ import { setCredentials } from "../features/auth/authSlice";
 import { Row, Col, Form, Card, Button, Container } from "react-bootstrap";
 import { toast } from "react-toastify";
 import Loader from "../Components/Loader";
+import Footer from "../Components/Footer";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -106,6 +107,7 @@ export default function Register() {
           </Card>
         </Col>
       </Form>
+      <Footer />
     </>
   );
 }

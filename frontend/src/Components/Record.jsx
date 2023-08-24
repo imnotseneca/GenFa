@@ -60,6 +60,7 @@ export default function Record({
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
+  
   useEffect(() => {
     const filteredInvoices = invoices
       .filter(() => {
@@ -279,3 +280,4 @@ export default function Record({
     </Container>
   );
 }
+

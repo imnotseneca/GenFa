@@ -1,19 +1,24 @@
 import express from "express";
 
 import {
-    getInvoices,
-    setInvoice,
-    updateInvoice,
-    deleteInvoice
+  getInvoices,
+  setInvoice,
+  updateInvoice,
+  getReceiverInvoices,
+  deleteInvoice,
 } from "../controllers/invoiceControllers.js";
 
 const router = express.Router();
 
-import { handleProtection } from "../middlewares/authMiddleware.js";
+import {
+  handleProtection,
+  handleInvoiceMakerProtection,
+} from "../middlewares/authMiddleware.js";
 
-router.get("/", handleProtection, getInvoices);
-router.post("/", handleProtection, setInvoice);
-router.put("/:id", handleProtection, updateInvoice);
-router.delete("/:id", handleProtection, deleteInvoice);
+router.get("/", handleInvoiceMakerProtection, getInvoices);
+router.get("/receiverInvoices", handleProtection, getReceiverInvoices);
+router.post("/", handleInvoiceMakerProtection, setInvoice);
+router.put("/:id", handleInvoiceMakerProtection, updateInvoice);
+router.delete("/:id", handleInvoiceMakerProtection, deleteInvoice);
 
 export default router;

@@ -8,6 +8,7 @@ import Login from "./pages/Login";
 import Profile from "./pages/Profile";
 import PrivateRoute from "./Components/PrivateRoute";
 import Header from "./Components/Header";
+
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
 
 export default function App() {

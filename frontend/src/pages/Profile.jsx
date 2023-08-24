@@ -17,6 +17,7 @@ export default function Profile() {
     university: "",
     password: "",
     confirmPassword: "",
+    phoneNumber: "",
   });
 
   const {
@@ -27,6 +28,7 @@ export default function Profile() {
     confirmPassword,
     career,
     university,
+    phoneNumber,
   } = formData;
 
   const [updateProfile, { isLoading }] = useUpdateProfileMutation();
@@ -45,11 +47,23 @@ export default function Profile() {
   }, [userInfo.firstName, userInfo.lastName]);
 
   const handleChange = (e) => {
-    setFormData((prevState) => ({
-      ...prevState,
-      [e.target.name]: e.target.value,
-    }));
+    const { name, value } = e.target;
+
+    // Handle phone number input separately
+    if (name === "phoneNumber") {
+      const sanitizedPhoneNumber = value.replace(/\D/g, ""); // Remove non-numeric characters
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: sanitizedPhoneNumber,
+      }));
+    } else {
+      setFormData((prevState) => ({
+        ...prevState,
+        [name]: value,
+      }));
+    }
   };
+
   const handleSubmit = async (e) => {
     e.preventDefault();
     if (password !== confirmPassword) {
@@ -64,8 +78,19 @@ export default function Profile() {
           password,
           career,
           university,
+          phoneNumber,
+          token: userInfo.token,
+          role: userInfo.role
         }).unwrap();
-        dispatch(setCredentials({ ...res }));
+
+        // Include all properties in the updated user data
+        const updatedUserData = {
+          ...res,
+          token: userInfo.token,
+          role: userInfo.role, // Make sure to include all properties here
+        };
+
+        dispatch(setCredentials(updatedUserData));
         navigate("/profile");
         toast.success("Usuario actualizado con éxito!");
       } catch (error) {
@@ -79,7 +104,10 @@ export default function Profile() {
       <Container>
         <h1 className="text-center mt-2">Datos de tu perfil:</h1>
       </Container>
-      <Card className="d-flex flex-column justify-content-center align-items-center my-3" style={{width: 'min(90%, 40.5rem)'}}>
+      <Card
+        className="d-flex flex-column justify-content-center align-items-center my-3"
+        style={{ width: "min(90%, 40.5rem)" }}
+      >
         <Card.Img
           variant="top"
           src="https://img.freepik.com/free-icon/user_318-644324.jpg"
@@ -178,6 +206,17 @@ export default function Profile() {
               </Form.Floating>
               <Form.Floating className="mb-3">
                 <Form.Control
+                  id="formPhoneNumber"
+                  type="tel" // Change the input type to "tel"
+                  placeholder="54 2346 545454"
+                  name="phoneNumber" // Change the name to something like "phoneNumber"
+                  value={phoneNumber} // Update the value state variable accordingly
+                  onChange={handleChange}
+                />
+                <label htmlFor="formPhoneNumber">Número de teléfono:</label>
+              </Form.Floating>
+              <Form.Floating className="mb-3">
+                <Form.Control
                   id="formPassword"
                   type="password"
                   placeholder="Contraseña"
@@ -196,7 +235,9 @@ export default function Profile() {
                   value={confirmPassword}
                   onChange={handleChange}
                 />
-                <label htmlFor="formConfirmPassword">Confirmar contraseña:</label>
+                <label htmlFor="formConfirmPassword">
+                  Confirmar contraseña:
+                </label>
               </Form.Floating>
               {isLoading && <Loader />}
               <Button variant="primary" type="submit">

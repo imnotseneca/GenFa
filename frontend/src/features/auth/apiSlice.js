@@ -1,7 +1,7 @@
 import { createApi, fetchBaseQuery } from "@reduxjs/toolkit/query/react";
 
 const baseQuery = fetchBaseQuery({
-  baseUrl: "https://invoice-withdb-bl7o-dev.fl0.io",
+  baseUrl: `${import.meta.env.VITE_APP_PROD_BACK_URL}`,
 });
 
 export const apiSlice = createApi({

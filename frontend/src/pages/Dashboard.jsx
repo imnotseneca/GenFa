@@ -1,6 +1,8 @@
+/* eslint-disable react/prop-types */
 import Container from "react-bootstrap/Container";
 import InvoiceForm from "../Components/InvoiceForm";
 import Record from "../Components/Record";
+import { Table, Pagination } from "react-bootstrap";
 import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
@@ -8,16 +10,125 @@ import { toast } from "react-toastify";
 
 export default function Dashboard() {
   const [invoices, setInvoices] = useState([]);
-
+  const [invoiceReceivers, setInvoiceReceivers] = useState([]);
+  const [invoiceForReceivers, setInvoiceForReceivers] = useState([]);
   const { userInfo } = useSelector((state) => state.auth);
 
+  const [currentPage, setCurrentPage] = useState(1);
+  const itemsPerPage = 10;
+
+  function CustomPagination({
+    currentPage,
+    itemsPerPage,
+    totalItems,
+    onPageChange,
+  }) {
+    const totalPages = Math.ceil(totalItems / itemsPerPage);
+  
+    const handlePageChange = (newPage) => {
+      if (newPage >= 1 && newPage <= totalPages) {
+        onPageChange(newPage);
+      }
+    };
+  
+    return (
+      <Pagination className="my-2 align-self-center">
+        <Pagination.First
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(1)}
+        />
+        <Pagination.Prev
+          disabled={currentPage === 1}
+          onClick={() => handlePageChange(currentPage - 1)}
+        />
+        <Pagination.Item active linkClassName="bg-dark border-dark">
+          {currentPage}
+        </Pagination.Item>
+        <Pagination.Ellipsis />
+        <Pagination.Item disabled="true">{totalPages}</Pagination.Item>
+        <Pagination.Next
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(currentPage + 1)}
+        />
+        <Pagination.Last
+          disabled={currentPage === totalPages}
+          onClick={() => handlePageChange(totalPages)}
+        />
+      </Pagination>
+    );
+  }
+
   //IMPLEMENT INVOICES.STATE TO REDUX TO AVOID REPEATED CALLS TO SERVER AND DB.
+
+
+  const fetchInvoiceReceivers = async () => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_APP_ENV === "production"
+          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}api/v1/getAllInvoiceReceivers`
+          : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/users/getAllInvoiceReceivers`,
+        {
+          headers: {
+            Authorization: `${userInfo.token}`,
+          },
+        }
+      );
+      setInvoiceReceivers([...response.data]);
+    } catch (error) {
+      console.error("Error fetching data:", error);
+    }
+  };
+
+  const fetchInvoicesForReceivers = async () => {
+    try {
+      const response = await axios.get(
+        import.meta.env.VITE_APP_ENV === "production"
+          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}/api/v1/invoices/receptorInvoices`
+          : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/invoices/receiverInvoices`,
+        {
+          headers: {
+            Authorization: `${userInfo.token}`,
+          },
+        }
+      );
+      setInvoiceForReceivers([...response.data]);
+    } catch (error) {
+      console.error("Error fetching user invoices:", error);
+    }
+  };
+
+  const invoiceForReceiverList = invoiceForReceivers.map((invoice, index) => {
+    const formatedDate = new Date(invoice.date).toLocaleDateString();
+    return (
+      <tbody key={index}>
+      <tr className="text-center">
+        <th>{formatedDate}</th>
+        <th>{invoice.invoiceFrom}</th>
+        <th>{invoice.reason}</th>
+        <th>{invoice.description}</th>
+        <th>{invoice.quantity}</th>
+        <th>{invoice.price}</th>
+        <th
+          className={
+            invoice.status.toLowerCase() === "pendiente"
+              ? "text-danger"
+              : "text-success"
+          }
+        >
+          {invoice.status}
+        </th>
+      </tr>
+      </tbody>
+    );
+  });
+
+
   const fetchData = async () => {
     try {
       const response = await axios.get(
         import.meta.env.VITE_APP_ENV === "production"
-          ? "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices"
-          : "http://localhost:8000/api/v1/invoices",
+          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}/api/v1/invoices`
+          : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/invoices`,
         {
           headers: {
             Authorization: `${userInfo.token}`,
@@ -35,8 +146,8 @@ export default function Dashboard() {
       await axios
         .put(
           import.meta.env.VITE_APP_ENV === "production"
-            ? `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`
-            : `http://localhost:8000/api/v1/invoices/${id}`,
+            ? `${import.meta.env.VITE_APP_PROD_BACK_URL}/api/v1/invoices/${id}`
+            : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/invoices/${id}`,
           { status: `Pago` },
           {
             headers: {
@@ -63,8 +174,8 @@ export default function Dashboard() {
     try {
       await axios.delete(
         import.meta.env.VITE_APP_ENV === "production"
-          ? `https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices/${id}`
-          : `http://localhost:8000/api/v1/invoices/${id}`,
+          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}/api/v1/invoices/${id}`
+          : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/invoices/${id}`,
         {
           headers: {
             Authorization: `${userInfo.token}`,
@@ -85,8 +196,8 @@ export default function Dashboard() {
     try {
       const response = await axios.post(
         import.meta.env.VITE_APP_ENV === "production"
-          ? "https://invoice-withdb-bl7o-dev.fl0.io/api/v1/invoices"
-          : `http://localhost:8000/api/v1/invoices`,
+          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}/api/v1/invoices`
+          : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/invoices`,
         newInvoice,
         {
           headers: {
@@ -97,29 +208,73 @@ export default function Dashboard() {
       setInvoices((prevInvoices) => [...prevInvoices, response.data]); // Update state with new invoice
       toast.success("Factura creada con éxito");
     } catch (error) {
-      toast.error("Error adding invoice:", error);
+      console.error("Error adding invoice:", error);
     }
   };
 
   useEffect(() => {
     fetchData();
+    fetchInvoiceReceivers();
+    fetchInvoicesForReceivers();
   }, []);
 
   return (
     <div className="App d-flex flex-column align-items-center justify-content-center w-100">
       <Container fluid className="lg-container">
-        <h1 className="text-white text-center my-2">Generador de facturas</h1>
+        <h1 className="text-white text-center my-2">
+          {userInfo.role === "invoiceMaker"
+            ? "Generador de facturas"
+            : "Historial de facturas"}
+        </h1>
         <hr className="text-white" />
-        <InvoiceForm
-          invoices={invoices}
-          handlePostInvoice={handlePostInvoice}
-        />
       </Container>
-      <Record
-        invoices={invoices}
-        handleUpdateInvoice={handleUpdateInvoice}
-        handleDeleteInvoice={handleDeleteInvoice}
+      {userInfo.role === "invoiceMaker" ? (
+        <Container>
+          <InvoiceForm
+            invoiceReceivers={invoiceReceivers}
+            invoices={invoices}
+            handlePostInvoice={handlePostInvoice}
+          />
+          <Record
+            invoices={invoices}
+            handleUpdateInvoice={handleUpdateInvoice}
+            handleDeleteInvoice={handleDeleteInvoice}
+          />
+        </Container>
+      ) : invoiceForReceivers.length > 0 ? (
+        <Container>
+          <Table
+            variant="dark"
+            striped
+            bordered
+            hover
+            responsive="md"
+            size="sm"
+            className="my-2"
+          >
+            <thead>
+              <tr className="text-center">
+                <th>Fecha</th>
+                <th>Emisor</th>
+                <th>Razón</th>
+                <th>Descripción</th>
+                <th>Cantidad</th>
+                <th>Precio</th>
+                <th>Estado</th>
+              </tr>
+            </thead>
+            {invoiceForReceiverList}
+          </Table>
+          <CustomPagination
+        currentPage={currentPage}
+        itemsPerPage={itemsPerPage}
+        totalItems={invoiceForReceivers.length}
+        onPageChange={setCurrentPage}
       />
+        </Container>
+      ) : (
+        <h2>Aun no te han generado facturas.</h2>
+      )}
     </div>
   );
 }
