@@ -65,7 +65,7 @@ export default function Dashboard() {
     try {
       const response = await axios.get(
         import.meta.env.VITE_APP_ENV === "production"
-          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}api/v1/getAllInvoiceReceivers`
+          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}/api/v1/getAllInvoiceReceivers`
           : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/users/getAllInvoiceReceivers`,
         {
           headers: {
