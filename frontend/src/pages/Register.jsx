@@ -7,6 +7,7 @@ import { useRegisterMutation } from "../features/auth/usersApiSlice";
 import { toast } from "react-toastify";
 import { setCredentials } from "../features/auth/authSlice";
 import { useNavigate, Link } from "react-router-dom";
+import Footer from "../Components/Footer";
 
 export default function Register() {
   const [formData, setFormData] = useState({
@@ -17,7 +18,9 @@ export default function Register() {
     university: "",
     password: "",
     confirmPassword: "",
-    token: ''
+    token: "",
+    role: "",
+    phoneNumber: '',
   });
 
   const {
@@ -28,7 +31,9 @@ export default function Register() {
     confirmPassword,
     career,
     university,
-    token
+    token,
+    role,
+    phoneNumber,
   } = formData;
 
   const navigate = useNavigate();
@@ -64,9 +69,11 @@ export default function Register() {
           career,
           university,
           token,
+          role,
+          phoneNumber,
         }).unwrap();
         dispatch(setCredentials({ ...res }));
-        toast.success('Usuario creado con éxito!')
+        toast.success("Usuario creado con éxito!");
         navigate("/");
       } catch (err) {
         toast.error(err?.data?.message || err.console.error());
@@ -75,16 +82,25 @@ export default function Register() {
   };
 
   return (
+    <>
     <Form onSubmit={handleSubmit}>
-      <Col lg={12} className="d-flex flex-column align-items-center justify-content-center">
+      <Col
+        lg={12}
+        className="d-flex flex-column align-items-center justify-content-center"
+      >
         <Col className="d-flex flex-column align-items-center justify-content-center my-2 text-white">
           <h1 className="">
             <FaUser />
             Registro
           </h1>
-          <p className="fw-bold text-center">Ingresá tus datos y creá un usuario 🧑</p>
+          <p className="fw-bold text-center">
+            Ingresá tus datos y creá un usuario 🧑
+          </p>
         </Col>
-        <Card className="d-flex p-4 p-xl-5 my-3 my-xl-4 mx-2" style={{"maxWidth": '1024px'}}>
+        <Card
+          className="d-flex p-4 p-xl-5 my-3 my-xl-4 mx-2"
+          style={{ maxWidth: "1024px" }}
+        >
           <Form.Floating className="mb-3">
             <Form.Control
               id="formFirstName"
@@ -141,6 +157,17 @@ export default function Register() {
             <label htmlFor="formEmail">Universidad:</label>
           </Form.Floating>
           <Form.Floating className="mb-3">
+              <Form.Control
+                id="formPhoneNumber"
+                type="tel" // Change the input type to "tel"
+                placeholder="54 2346 545454"
+                name="phoneNumber" // Change the name to something like "phoneNumber"
+                value={phoneNumber} // Update the value state variable accordingly
+                onChange={handleChange}
+              />
+              <label htmlFor="formPhoneNumber">Número de teléfono:</label>
+            </Form.Floating>
+          <Form.Floating className="mb-3">
             <Form.Control
               id="formPassword"
               type="password"
@@ -168,11 +195,16 @@ export default function Register() {
           </Button>
           <Row className="py-3 text-center">
             <Col>
-              Ya tenés una cuenta? <Link to={`/login`} className="fw-bold">Ingresa aca.</Link>
+              Ya tenés una cuenta?{" "}
+              <Link to={`/login`} className="fw-bold">
+                Ingresa aca.
+              </Link>
             </Col>
           </Row>
         </Card>
       </Col>
     </Form>
+      <Footer />
+      </>
   );
 }

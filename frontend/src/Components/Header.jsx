@@ -3,7 +3,7 @@ import { BiLogOut } from "react-icons/bi";
 import Container from "react-bootstrap/Container";
 import Nav from "react-bootstrap/Nav";
 import Navbar from "react-bootstrap/Navbar";
-import { NavDropdown } from "react-bootstrap";
+import { NavDropdown, Badge } from "react-bootstrap";
 import { useDispatch, useSelector } from "react-redux";
 // import { useLogoutMutation } from "../features/auth/usersApiSlice";
 import { logout } from "../features/auth/authSlice";
@@ -29,7 +29,7 @@ export default function Header() {
   return (
     <header>
       <Navbar bg="dark" data-bs-theme="dark" expand="lg" collapseOnSelect>
-        <Container style={{width: 'min(90%,70.5rem)'}}>
+        <Container style={{ width: "min(90%,70.5rem)" }}>
           <Navbar.Brand className="logo" href="/" style={{ padding: "8px" }}>
             GenFa💸
           </Navbar.Brand>
@@ -37,13 +37,13 @@ export default function Header() {
           <Navbar.Collapse id="basic-navbar-navs">
             <Nav className="me-auto">
               {userInfo ? (
-                <Container fluid className="d-flex align-items-center">
+                <Container fluid className="d-flex flex-lg-row flex-column align-items-center gap-2">
                   <NavDropdown
                     title={`${userInfo.firstName} ${userInfo.lastName}`}
                     id="username"
                     style={{
-                      width: '100%',
-                      fontWeight: 'bold'
+                      width: "100%",
+                      fontWeight: "bold",
                     }}
                   >
                     <Container fluid className="d-flex align-items-center">
@@ -60,6 +60,13 @@ export default function Header() {
                       </NavDropdown.Item>
                     </Container>
                   </NavDropdown>
+                  {userInfo.role === "invoiceMaker" ? (
+                    <Badge bg="success">Generador</Badge>
+                  ) : userInfo.role === "admin" ? (
+                    <Badge bg="light" text="dark">Admin</Badge>
+                  ) : (
+                    <Badge bg="danger">Receptor</Badge>
+                  )}
                 </Container>
               ) : (
                 <>
