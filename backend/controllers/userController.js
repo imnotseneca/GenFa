@@ -141,18 +141,19 @@ const updateUserProfile = asyncHandler(async (req, res) => {
       });
       if (phoneNumberExists) {
         res.status(400);
-        throw new Error("Phone number already exists.");
+        throw new Error("Ese número ya pertenece a un usuario.");
       }
-    }
-    // Check if phoneNumber starts with "54" and has at least 12 digits
-    if (
-      !req.body.phoneNumber.startsWith("54") ||
-      req.body.phoneNumber.replace(/\D/g, "").length < 12
-    ) {
-      res.status(400);
-      throw new Error(
-        "El número de teléfono debe comenzar con '54' y tener al menos 12 dígitos."
-      );
+
+      // Check if phoneNumber starts with "54" and has at least 12 digits
+      if (
+        !req.body.phoneNumber.startsWith("54") ||
+        req.body.phoneNumber.replace(/\D/g, "").length < 12
+      ) {
+        res.status(400);
+        throw new Error(
+          "El número de teléfono debe comenzar con '54' y tener al menos 12 dígitos."
+        );
+      }
     }
 
     // Update fields if provided in the request body
@@ -182,6 +183,7 @@ const updateUserProfile = asyncHandler(async (req, res) => {
     throw new Error("Usuario no encontrado.");
   }
 });
+
 
 // @desc   Update user role
 // @route  PUT api/v1/users/:id
