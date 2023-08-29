@@ -28,7 +28,6 @@ export default function ResetPassword() {
           password,
         })
         .then((res) => {
-          console.log(res.data.Status);
           if (res.data.Status === "Success") {
             toast.success("Contraseña actualizada con exito!");
             navigate("/login");

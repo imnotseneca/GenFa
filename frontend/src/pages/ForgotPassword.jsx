@@ -25,7 +25,6 @@ export default function ForgotPassword() {
       await axios
         .post(`${baseUrl}/api/v1/users/forgotPassword`, { email })
         .then((res) => {
-          console.log(res.data.Status)
           if (res.data.Status === "Success") {
             toast.success("E-mail envíado con éxito!");
             navigate("/login");
