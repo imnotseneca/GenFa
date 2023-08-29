@@ -1,6 +1,9 @@
 import asyncHandler from "express-async-handler";
 import User from "../models/userModel.js";
 import generateToken from "../utils/generateToken.js";
+import generateEmail from "../utils/generateEmail.js";
+import jwt from "jsonwebtoken";
+import bcrypt from "bcryptjs";
 
 // @desc   Auth user/set token
 // @route  POST api/v1/users/auth
@@ -184,7 +187,6 @@ const updateUserProfile = asyncHandler(async (req, res) => {
   }
 });
 
-
 // @desc   Update user role
 // @route  PUT api/v1/users/:id
 // @acces  Public.
@@ -205,6 +207,51 @@ const updateUserRole = asyncHandler(async (req, res) => {
     throw new Error("Usuario no encontrado.");
   }
 });
+
+const forgotPassword = asyncHandler(async (req, res) => {
+  const { email } = req.body;
+  const user = await User.findOne({ email });
+
+  try {
+    if (user) {
+      const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
+        expiresIn: "1m",
+      });
+      //Stored in "utils" folder
+      generateEmail(email, token, user);
+      res.send({Status: 'Success'})
+    }
+  } catch (error) {
+    return res
+      .status(404)
+      .send("No existe un usuario relacionado a ese e-mail.");
+  }
+});
+
+const resetPassword = asyncHandler(async (req, res) => {
+  const { id, token } = req.params;
+  const { password } = req.body;
+  const decodedToken = jwt.verify(
+    token,
+    process.env.JWT_SECRET,
+    (err, decoded) => {
+      if (err) {
+        return res.json({
+          Status: "Ha ocurrido un error con la verificación del token",
+        });
+      } else {
+        bcrypt
+          .hash(password, 10)
+          .then((hash) => {
+            User.findByIdAndUpdate({ _id: id }, { password: hash })
+              .then((u) => res.send({ Status: "Success" }))
+              .catch((err) => res.send({ Status: err }));
+          })
+          .catch((err) => res.send({ Status: err }));
+      }
+    }
+  );
+});
 export {
   authUser,
   registerUser,
@@ -212,4 +259,6 @@ export {
   updateUserProfile,
   updateUserRole,
   getAllInvoiceReceivers,
+  forgotPassword,
+  resetPassword,
 };

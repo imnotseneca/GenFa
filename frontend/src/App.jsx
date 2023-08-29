@@ -6,6 +6,8 @@ import Dashboard from "./pages/Dashboard";
 import Register from "./pages/Register";
 import Login from "./pages/Login";
 import Profile from "./pages/Profile";
+import ForgotPassword from "./pages/ForgotPassword";
+import ResetPassword from "./pages/ResetPassword";
 import PrivateRoute from "./Components/PrivateRoute";
 import Header from "./Components/Header";
 
@@ -22,6 +24,8 @@ export default function App() {
           </Route>
           <Route path="/login" element={<Login />} />
           <Route path="/register" element={<Register />} />
+          <Route path="/forgot-password" element={<ForgotPassword />} />
+          <Route path="/reset-password/:id/:token" element={<ResetPassword />} />
           {/* Private Routes*/}
           <Route path="" element={<PrivateRoute />}>
             <Route path="/profile" element={<Profile />} />
