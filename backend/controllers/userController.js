@@ -215,7 +215,7 @@ const forgotPassword = asyncHandler(async (req, res) => {
   try {
     if (user) {
       const token = jwt.sign({ id: user._id }, process.env.JWT_SECRET, {
-        expiresIn: "1m",
+        expiresIn: "10m",
       });
       //Stored in "utils" folder
       generateEmail(email, token, user);
