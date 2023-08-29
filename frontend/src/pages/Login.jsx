@@ -50,7 +50,10 @@ export default function Register() {
     <>
       <Container className="d-flex flex-column align-items-center justify-content-center my-3 text-white ">
         <h1 className="text-bold text-center">Bienvenido a GenFa💸</h1>
-        <p className="text-center">Aca vas a poder generar facturas y recibos para mandarle a los pibardos</p>
+        <p className="text-center">
+          Aca vas a poder generar facturas y recibos para mandarle a los
+          pibardos
+        </p>
       </Container>
       <Form onSubmit={handleSubmit}>
         <Col
@@ -82,7 +85,6 @@ export default function Register() {
               <label htmlFor="formEmail">Dirección de e-mail:</label>
             </Form.Floating>
             <Form.Floating className="mb-3">
-              <label htmlFor="formPassword">Contraseña:</label>
               <Form.Control
                 id="formPassword"
                 type="password"
@@ -91,6 +93,7 @@ export default function Register() {
                 value={password}
                 onChange={handleChange}
               />
+              <label htmlFor="formPassword">Contraseña:</label>
             </Form.Floating>
             {isLoading && <Loader />}
             <Button variant="primary" type="submit">
@@ -101,6 +104,14 @@ export default function Register() {
                 Todavía no tenés una cuenta?{" "}
                 <Link to={`/register`} className="fw-bold">
                   Registrate aca.
+                </Link>
+              </Col>
+            </Row>
+            <Row className="py-1 text-center">
+              <Col>
+                Olvidé mi{" "}
+                <Link to={`/forgot-password`} className="fw-bold">
+                  contraseña.
                 </Link>
               </Col>
             </Row>
