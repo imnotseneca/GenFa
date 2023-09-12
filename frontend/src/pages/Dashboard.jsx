@@ -7,13 +7,14 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
+import Loader from '../Components/Loader'
 
 export default function Dashboard() {
   const [invoices, setInvoices] = useState([]);
   const [invoiceReceivers, setInvoiceReceivers] = useState([]);
   const [invoiceForReceivers, setInvoiceForReceivers] = useState([]);
   const { userInfo } = useSelector((state) => state.auth);
-
+  const [isloading, setIsloading] = useState(false);
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
 
@@ -24,13 +25,13 @@ export default function Dashboard() {
     onPageChange,
   }) {
     const totalPages = Math.ceil(totalItems / itemsPerPage);
-  
+
     const handlePageChange = (newPage) => {
       if (newPage >= 1 && newPage <= totalPages) {
         onPageChange(newPage);
       }
     };
-  
+
     return (
       <Pagination className="my-2 align-self-center">
         <Pagination.First
@@ -60,13 +61,16 @@ export default function Dashboard() {
 
   //IMPLEMENT INVOICES.STATE TO REDUX TO AVOID REPEATED CALLS TO SERVER AND DB.
 
-
   const fetchInvoiceReceivers = async () => {
     try {
       const response = await axios.get(
         import.meta.env.VITE_APP_ENV === "production"
-          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}/api/v1/users/getAllInvoiceReceivers`
-          : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/users/getAllInvoiceReceivers`,
+          ? `${
+              import.meta.env.VITE_APP_PROD_BACK_URL
+            }/api/v1/users/getAllInvoiceReceivers`
+          : `${
+              import.meta.env.VITE_APP_DEV_BACK_URL
+            }/api/v1/users/getAllInvoiceReceivers`,
         {
           headers: {
             Authorization: `${userInfo.token}`,
@@ -81,18 +85,25 @@ export default function Dashboard() {
 
   const fetchInvoicesForReceivers = async () => {
     try {
+      setIsloading(true);
       const response = await axios.get(
         import.meta.env.VITE_APP_ENV === "production"
-          ? `${import.meta.env.VITE_APP_PROD_BACK_URL}/api/v1/invoices/receiverInvoices`
-          : `${import.meta.env.VITE_APP_DEV_BACK_URL}/api/v1/invoices/receiverInvoices`,
+          ? `${
+              import.meta.env.VITE_APP_PROD_BACK_URL
+            }/api/v1/invoices/receiverInvoices`
+          : `${
+              import.meta.env.VITE_APP_DEV_BACK_URL
+            }/api/v1/invoices/receiverInvoices`,
         {
           headers: {
             Authorization: `${userInfo.token}`,
           },
         }
       );
+      setIsloading(false);
       setInvoiceForReceivers([...response.data]);
     } catch (error) {
+      setIsloading(false);
       console.error("Error fetching user invoices:", error);
     }
   };
@@ -101,27 +112,26 @@ export default function Dashboard() {
     const formatedDate = new Date(invoice.date).toLocaleDateString();
     return (
       <tbody key={index}>
-      <tr className="text-center">
-        <th>{formatedDate}</th>
-        <th>{invoice.invoiceFrom}</th>
-        <th>{invoice.reason}</th>
-        <th>{invoice.description}</th>
-        <th>{invoice.quantity}</th>
-        <th>{invoice.price}</th>
-        <th
-          className={
-            invoice.status.toLowerCase() === "pendiente"
-              ? "text-danger"
-              : "text-success"
-          }
-        >
-          {invoice.status}
-        </th>
-      </tr>
+        <tr className="text-center">
+          <th>{formatedDate}</th>
+          <th>{invoice.invoiceFrom}</th>
+          <th>{invoice.reason}</th>
+          <th>{invoice.description}</th>
+          <th>{invoice.quantity}</th>
+          <th>{invoice.price}</th>
+          <th
+            className={
+              invoice.status.toLowerCase() === "pendiente"
+                ? "text-danger"
+                : "text-success"
+            }
+          >
+            {invoice.status}
+          </th>
+        </tr>
       </tbody>
     );
   });
-
 
   const fetchData = async () => {
     try {
@@ -218,6 +228,66 @@ export default function Dashboard() {
     fetchInvoicesForReceivers();
   }, []);
 
+  //   return (
+  //     <div className="App d-flex flex-column align-items-center justify-content-center w-100">
+  //       <Container fluid className="lg-container">
+  //         <h1 className="text-white text-center my-2">
+  //           {userInfo.role === "invoiceMaker"
+  //             ? "Generador de facturas"
+  //             : "Historial de facturas"}
+  //         </h1>
+  //         <hr className="text-white" />
+  //       </Container>
+  //       {userInfo.role === "invoiceMaker" ? (
+  //         <Container>
+  //           <InvoiceForm
+  //             invoiceReceivers={invoiceReceivers}
+  //             invoices={invoices}
+  //             handlePostInvoice={handlePostInvoice}
+  //           />
+  //           <Record
+  //             invoices={invoices}
+  //             handleUpdateInvoice={handleUpdateInvoice}
+  //             handleDeleteInvoice={handleDeleteInvoice}
+  //           />
+  //         </Container>
+  //       ) : invoiceForReceivers.length > 0 ? (
+  //         <Container>
+  //           <Table
+  //             variant="dark"
+  //             striped
+  //             bordered
+  //             hover
+  //             responsive="md"
+  //             size="sm"
+  //             className="my-2"
+  //           >
+  //             <thead>
+  //               <tr className="text-center">
+  //                 <th>Fecha</th>
+  //                 <th>Emisor</th>
+  //                 <th>Razón</th>
+  //                 <th>Descripción</th>
+  //                 <th>Cantidad</th>
+  //                 <th>Precio</th>
+  //                 <th>Estado</th>
+  //               </tr>
+  //             </thead>
+  //             {invoiceForReceiverList}
+  //           </Table>
+  //           <CustomPagination
+  //         currentPage={currentPage}
+  //         itemsPerPage={itemsPerPage}
+  //         totalItems={invoiceForReceivers.length}
+  //         onPageChange={setCurrentPage}
+  //       />
+  //         </Container>
+  //       ) : (
+  //         <h2>Aun no te han generado facturas.</h2>
+  //       )}
+  //     </div>
+  //   );
+  // }
   return (
     <div className="App d-flex flex-column align-items-center justify-content-center w-100">
       <Container fluid className="lg-container">
@@ -228,7 +298,9 @@ export default function Dashboard() {
         </h1>
         <hr className="text-white" />
       </Container>
-      {userInfo.role === "invoiceMaker" ? (
+      {isloading ? (
+        <Loader/> // Render a loader here
+      ) : userInfo.role === "invoiceMaker" ? (
         <Container>
           <InvoiceForm
             invoiceReceivers={invoiceReceivers}
@@ -266,11 +338,11 @@ export default function Dashboard() {
             {invoiceForReceiverList}
           </Table>
           <CustomPagination
-        currentPage={currentPage}
-        itemsPerPage={itemsPerPage}
-        totalItems={invoiceForReceivers.length}
-        onPageChange={setCurrentPage}
-      />
+            currentPage={currentPage}
+            itemsPerPage={itemsPerPage}
+            totalItems={invoiceForReceivers.length}
+            onPageChange={setCurrentPage}
+          />
         </Container>
       ) : (
         <h2>Aun no te han generado facturas.</h2>
