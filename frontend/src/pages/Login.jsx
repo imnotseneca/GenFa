@@ -51,8 +51,7 @@ export default function Register() {
       <Container className="d-flex flex-column align-items-center justify-content-center my-3 text-white ">
         <h1 className="text-bold text-center">Bienvenido a GenFa💸</h1>
         <p className="text-center">
-          Aca vas a poder generar facturas y recibos para mandarle a los
-          pibardos
+          Aca vas a poder generar facturas y recibos.
         </p>
       </Container>
       <Form onSubmit={handleSubmit}>
