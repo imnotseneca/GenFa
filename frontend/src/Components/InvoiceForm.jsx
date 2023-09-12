@@ -142,7 +142,7 @@ export default function InvoiceForm({
     const selectedReceiverData = invoiceReceivers.find(
       (receiver) => receiver._id === selectedReceiverId
     );
-  
+
     setSelectedReceiverData({
       billTo: `${selectedReceiverData.firstName} ${selectedReceiverData.lastName}`,
       billToEmail: selectedReceiverData.email,
@@ -263,15 +263,23 @@ export default function InvoiceForm({
                 <Col lg={6}>
                   <div className="d-flex flex-row align-items-start justify-content-between">
                     <span className="fw-bold">Subtotal:</span>
-                    <span>
-                      {state.currency} {state.subTotal}
-                    </span>
+                    {!isNaN(state.subTotal) ? (
+                      <span>
+                        {state.currency} {state.subTotal}
+                      </span>
+                    ) : (
+                      `$0.00`
+                    )}
                   </div>
                   <div className="d-flex flex-row align-items-start justify-content-between">
                     <span className="fw-bold">Total:</span>
-                    <span>
-                      {state.currency} {total}
-                    </span>
+                    {!isNaN(total) ? (
+                      <span>
+                        {state.currency} {total}
+                      </span>
+                    ) : (
+                      `$0.00`
+                    )}
                   </div>
                 </Col>
               </Row>
