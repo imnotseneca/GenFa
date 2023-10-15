@@ -14,11 +14,6 @@ const invoiceSchema = mongoose.Schema({
     type: String,
     required: [true, "Por favor agrega un emisor"],
   },
-  // receptorEmail: {
-  //   type: String,
-  //   required: [true, "Por favor agrega un email"],
-  //   // match: [/^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,})+$/, 'El formato de email debe ser el siguiente: johndoe@example.com'],
-  // },
   reason: {
     type: String,
     required: [true, "Por favor agrega una descripción"],
@@ -42,11 +37,6 @@ const invoiceSchema = mongoose.Schema({
   date: {
     type: Date,
     default: Date.now,
-  },
-  receptorID: {
-    type: mongoose.Schema.Types.ObjectId,
-    required: true,
-    ref: "User",
   },
 });
 

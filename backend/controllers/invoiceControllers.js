@@ -49,10 +49,6 @@ const getReceiverInvoices = asyncHandler(async (req, res) => {
 // @route   POST /api/v1/invoices/
 // @access  Private
 const setInvoice = asyncHandler(async (req, res) => {
-  // const {email} = req.body
-
-  // const user = await User.findOne({ email });
-
   if (!req.body.invoiceTo) {
     res.status(400);
     throw new Error("Por favor agrega un destinatario!");
@@ -70,39 +66,27 @@ const setInvoice = asyncHandler(async (req, res) => {
     throw new Error("Por favor agrega un precio!");
   }
 
+  const invoices = [];
 
-  const invoice = await Invoice.create({
-    user: req.user.id,
-    invoiceTo: req.body.invoiceTo,
-    invoiceFrom: req.body.invoiceFrom,
-    // receptorEmail: req.body.receptorEmail,
-    reason: req.body.reason,
-    description: req.body.description,
-    quantity: req.body.quantity,
-    price: req.body.price,
-    receptorID: req.body.receptorID
-  });
+  for (const receiver of req.body.receptorData) {
+    const invoice = await Invoice.create({
+      user: req.user.id,
+      invoiceTo: receiver.billTo,
+      invoiceFrom: req.body.invoiceFrom,
+      reason: req.body.reason,
+      description: req.body.description,
+      quantity: req.body.quantity,
+      price: req.body.price,
+      receptorID: receiver.receptorID,
+    });
 
-  // if(user) {
-  //   if(req.body.reason.toLowerCase() === 'multa') {
-  //     user.penalties.push({
-  //       reason: req.body.reason,
-  //       description: req.body.description,
-  //       amount: req.body.price
-  //     })
-  //   }
-  //   if(req.body.reason.toLowerCase() === 'cuota') {
-  //     user.dues.push({
-  //       reason: req.body.reason,
-  //       description: req.body.description,
-  //       amount: req.body.price
-  //     })
-  //   }
-  // }
-  // const updatedUser = await user.save();
+    invoices.push(invoice);
+  }
 
-  res.status(200).json(invoice);
+  res.status(200).json(invoices);
 });
+
+
 
 // @desc    Update invoice
 // @route   PUT /api/v1/invoices/:id

@@ -12,17 +12,24 @@ import { Container, Button, CloseButton } from "react-bootstrap";
 // jsPDF DOCS - > https://artskydj.github.io/jsPDF/docs/jsPDF.html
 
 export default function InvoiceModal(props) {
+  const generateInvoiceData = () => {
+    const newInvoiceData = {
+      invoiceTo: getReceiverNames(),
+      invoiceFrom: props.info.billFrom,
+      reason: props.items[0].name,
+      description: props.items[0].description,
+      quantity: props.items[0].quantity,
+      price: props.items[0].price,
+      receptorData: props.info.receptorData, // Updated to include receptorData
+    };
 
-  const newInvoiceData = {
-    invoiceTo: props.info.billTo,
-    invoiceFrom: props.info.billFrom,
-    reason: props.items[0].name,
-    description: props.items[0].description,
-    quantity: props.items[0].quantity,
-    price: props.items[0].price,
-    receptorID: props.info.receptorID
+    return newInvoiceData;
   };
 
+  const getReceiverNames = () => {
+    const names = props.info.receptorData.map((receiver) => receiver.billTo);
+    return names.length > 1 ? names.join(", ") : names[0];
+  };
 
   const GenerateInvoice = async () => {
     html2canvas(document.querySelector("#invoiceCapture")).then((canvas) => {
@@ -30,7 +37,7 @@ export default function InvoiceModal(props) {
       const pdf = new jsPDF({
         orientation: "portrait",
         unit: "pt",
-        format: [412, 1012],
+        format: props.info.receptorData.length > 1 ? [1940, 380] : [412, 1012],
       });
       pdf.internal.scaleFactor = 1;
       const imgProps = pdf.getImageProperties(imgData);
@@ -42,7 +49,7 @@ export default function InvoiceModal(props) {
       );
     });
 
-    props.handlePostInvoice(newInvoiceData);
+    props.handlePostInvoice(generateInvoiceData());
   };
   return (
     <div>
@@ -55,7 +62,11 @@ export default function InvoiceModal(props) {
         style={{ padding: "0" }}
       >
         <Container className="bg-light p-0 d-flex justify-content-end">
-        <CloseButton aria-label="close button" onClick={props.closeModal} className="p-2"/>
+          <CloseButton
+            aria-label="close button"
+            onClick={props.closeModal}
+            className="p-2"
+          />
         </Container>
         <div
           id="invoiceCapture"
@@ -83,11 +94,19 @@ export default function InvoiceModal(props) {
               <Col md={12}>
                 <h5 className="fw-bold">Facturado&nbsp;a:</h5>
                 <p>
-                  <strong>Nombre:</strong> {props.info.billTo || ""}
+                  <strong>
+                    Nombre{props.info.receptorData.length > 1 ? "s" : ""}:
+                  </strong>{" "}
+                  {getReceiverNames() || ""}
                 </p>
                 <p>
-                  <strong>Dirección de E-mail: </strong>
-                  {props.info.billToEmail || ""}
+                  <strong>
+                    Dirección de E-mail
+                    {props.info.receptorData.length > 1 ? "s" : ""}:{" "}
+                  </strong>
+                  {props.info.receptorData
+                    .map((receiver) => receiver.billToEmail)
+                    .join(", ") || ""}
                 </p>
               </Col>
               <Col md={12}>

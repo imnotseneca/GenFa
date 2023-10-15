@@ -7,7 +7,7 @@ import { useState, useEffect } from "react";
 import { useSelector } from "react-redux";
 import axios from "axios";
 import { toast } from "react-toastify";
-import Loader from '../Components/Loader'
+import Loader from "../Components/Loader";
 
 export default function Dashboard() {
   const [invoices, setInvoices] = useState([]);
@@ -217,6 +217,7 @@ export default function Dashboard() {
       );
       setInvoices((prevInvoices) => [...prevInvoices, response.data]); // Update state with new invoice
       toast.success("Factura creada con éxito");
+      fetchData();
     } catch (error) {
       console.error("Error adding invoice:", error);
     }
@@ -299,7 +300,7 @@ export default function Dashboard() {
         <hr className="text-white" />
       </Container>
       {isloading ? (
-        <Loader/> // Render a loader here
+        <Loader /> // Render a loader here
       ) : userInfo.role === "invoiceMaker" ? (
         <Container>
           <InvoiceForm

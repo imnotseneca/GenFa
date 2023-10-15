@@ -13,7 +13,7 @@ const generateEmail = (email, token, user) => {
     from: `${process.env.NODEMAILER_GMAIL_ID}`,
     to: `${email}`,
     subject: "[GENFA] Olvidé mi contraseña:",
-    text: `Parece que sos medio boludito y te olvidaste la contraseña, metete acá para poder resetearla: https://genfa.vercel.app/reset-password/${user._id}/${token}`,
+    text: `Parece que te olvidaste la contraseña, metete acá para poder resetearla: https://genfa.vercel.app/reset-password/${user._id}/${token}`,
   };
 
   transporter.sendMail(mailOptions, function (error, info) {

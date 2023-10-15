@@ -60,10 +60,16 @@ export default function Record({
 
   const [currentPage, setCurrentPage] = useState(1);
   const itemsPerPage = 10;
-  
+
   useEffect(() => {
     const filteredInvoices = invoices
-      .filter(() => {
+      .filter((invoice) => {
+        // Check if invoice is defined
+        if (!invoice) {
+          return false;
+        }
+
+        // Add other conditions based on your requirements
         if (filters.dateFilter === "newToOld") {
           return true; // No date filtering for this option
         } else if (filters.dateFilter === "oldToNew") {
@@ -73,18 +79,30 @@ export default function Record({
           return true;
         }
       })
-      .filter(
-        (invoice) =>
-          filters.nameFilter.trim() === "" || // Validate if nameFilter is empty or consists of only whitespace
+      .filter((invoice) => {
+        // Check if invoice is defined and has invoiceTo property
+        if (!invoice || !invoice.invoiceTo) {
+          return false;
+        }
+
+        // Validate if nameFilter is empty or consists of only whitespace
+        return (
+          filters.nameFilter.trim() === "" ||
           invoice.invoiceTo
             .toLowerCase()
             .includes(filters.nameFilter.toLowerCase())
-      )
-      .filter((invoice) =>
-        invoice.reason
+        );
+      })
+      .filter((invoice) => {
+        // Check if invoice is defined and has reason property
+        if (!invoice || !invoice.reason) {
+          return false;
+        }
+
+        return invoice.reason
           .toLowerCase()
-          .includes(filters.reasonFilter.toLowerCase())
-      );
+          .includes(filters.reasonFilter.toLowerCase());
+      });
 
     setInvoices(filteredInvoices);
   }, [invoices, filters]);
@@ -116,6 +134,12 @@ export default function Record({
 
   const recordList = currentItems.map((invoice, index) => {
     const formatedDate = new Date(invoice.date).toLocaleDateString();
+
+    if (!invoice.status) {
+      console.log("Undefined status for invoice:", invoice);
+    }
+    const status = invoice.status ? invoice.status.toLowerCase() : "";
+
     return (
       <tbody key={index}>
         <tr className="text-center">
@@ -126,13 +150,9 @@ export default function Record({
           <th>{invoice.quantity}</th>
           <th>{invoice.price}</th>
           <th
-            className={
-              invoice.status.toLowerCase() === "pendiente"
-                ? "text-danger"
-                : "text-success"
-            }
+            className={status === "pendiente" ? "text-danger" : "text-success"}
           >
-            {invoice.status}
+            {status}
           </th>
           <th>
             <Button
@@ -140,7 +160,7 @@ export default function Record({
               size="sm"
               type="submit"
               variant="outline-success"
-              disabled={invoice.status === "Pago" ? true : false}
+              disabled={status === "pago" ? true : false}
             >
               <BiCheck
                 onClick={() => handleUpdateInvoice(invoice._id)}
@@ -208,7 +228,9 @@ export default function Record({
           </Form.Control>
         </Form.Group>
         <Form.Group className=" my-2">
-          <Form.Label className="text-white" htmlFor="nameFilter">Filtrar por nombre:</Form.Label>
+          <Form.Label className="text-white" htmlFor="nameFilter">
+            Filtrar por nombre:
+          </Form.Label>
           <Form.Control
             type="text"
             name="nameFilter"
@@ -219,7 +241,9 @@ export default function Record({
           />
         </Form.Group>
         <Form.Group className=" my-2">
-          <Form.Label className="text-white" htmlFor="reasonFilter">Filtrar por razón:</Form.Label>
+          <Form.Label className="text-white" htmlFor="reasonFilter">
+            Filtrar por razón:
+          </Form.Label>
           <Form.Control
             type="text"
             name="reasonFilter"
@@ -280,4 +304,3 @@ export default function Record({
     </Container>
   );
 }
-

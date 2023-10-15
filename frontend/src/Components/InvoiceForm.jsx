@@ -1,17 +1,20 @@
 /* eslint-disable react/prop-types */
 import { useState, useEffect } from "react";
 import "bootstrap/dist/css/bootstrap.min.css";
-import Row from "react-bootstrap/Row";
-import Col from "react-bootstrap/Col";
-import Button from "react-bootstrap/Button";
-import Form from "react-bootstrap/Form";
-import Card from "react-bootstrap/Card";
 import InvoiceItem from "./InvoiceItem";
 import InvoiceModal from "./InvoiceModal";
 import { useSelector } from "react-redux/es/hooks/useSelector";
 import { BsArrowRight } from "react-icons/bs";
 import "../App.css";
-import { Container } from "react-bootstrap";
+import {
+  Container,
+  Dropdown,
+  Card,
+  Form,
+  Button,
+  Col,
+  Row,
+} from "react-bootstrap";
 
 export default function InvoiceForm({
   invoices,
@@ -25,19 +28,15 @@ export default function InvoiceForm({
     currency: "$",
     currentDate: "",
     invoiceNumber: 0,
-    billTo: ``,
-    billToEmail: "",
     billFrom: `${userInfo.firstName} ${userInfo.lastName}`,
     notes: "",
     subTotal: "",
-    receptorID: "",
+    receptorData: [], // Array to store data for multiple receivers
+    receptorIDs: [],
   });
 
-  const [selectedReceiverData, setSelectedReceiverData] = useState({
-    billTo: "",
-    billToEmail: "",
-    receptorID: "",
-  });
+  const [selectedReceiverData, setSelectedReceiverData] = useState([]);
+
   const [total, setTotal] = useState(0.0);
   const [items, setItems] = useState([
     {
@@ -49,12 +48,16 @@ export default function InvoiceForm({
     },
   ]);
 
-  // const onChange = (event) => {
-  //   setState((state) => ({
-  //     ...state,
-  //     [event.target.name]: event.target.value,
-  //   }));
-  // };
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+
+  const handleDropdownToggle = (isOpen, event, metadata) => {
+    // If the toggle event was triggered by a checkbox, keep the dropdown open
+    if (metadata && metadata.source === "checkbox") {
+      setDropdownOpen(true);
+    } else {
+      setDropdownOpen(isOpen);
+    }
+  };
 
   const onItemizedItemEdit = (event) => {
     const individualItem = {
@@ -73,41 +76,6 @@ export default function InvoiceForm({
     });
     setItems(newItems);
   };
-
-  // const handleAddEvent = () => {
-  //   const id = (+new Date() + Math.floor(Math.random() * 999999)).toString(36);
-  //   const item = {
-  //     id: id,
-  //     name: "",
-  //     price: 1.0,
-  //     description: "",
-  //     quantity: 1,
-  //   };
-  //   setItems((items) => [...items, item]);
-  // };
-
-  // const handleRowDel = (item) => {
-  //   if (items.length > 0) {
-  //     setItems((oldState) => {
-  //       const itemIndex = oldState.findIndex(
-  //         (data) => data.id === item.id
-  //       );
-  //       if (itemIndex !== -1) {
-  //         oldState.splice(itemIndex, 1);
-  //       } return [...oldState]
-  //     })
-  //     } else {
-  //       setItems([
-  //         {
-  //           id: "0",
-  //           name: "",
-  //           description: "",
-  //           price: 1.0,
-  //           quantity: 1,
-  //         },
-  //       ]);
-  //     }
-  //   }
 
   const handeCalculateTotal = (items) => {
     let subTotal = 0;
@@ -129,35 +97,121 @@ export default function InvoiceForm({
     `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
   );
 
-  const invoiceReceiverList = sortedInvoiceReceivers.map((receiver) => {
-    return (
-      <option value={receiver._id} key={receiver._id}>
-        {receiver.firstName} {receiver.lastName}
-      </option>
-    );
-  });
+  const handleCheckboxChange = (e) => {
+    const { value } = e.target;
 
-  function handleSelectOption(e) {
-    const selectedReceiverId = e.target.value; // Use the _id as the value
-    const selectedReceiverData = invoiceReceivers.find(
-      (receiver) => receiver._id === selectedReceiverId
-    );
+    setState((prevState) => {
+      // ... (your existing code)
 
-    setSelectedReceiverData({
-      billTo: `${selectedReceiverData.firstName} ${selectedReceiverData.lastName}`,
-      billToEmail: selectedReceiverData.email,
-      receptorID: selectedReceiverData._id,
+      // Find the selected receiver data based on the clicked checkbox
+      const selectedReceiver = invoiceReceivers.find(
+        (receiver) => receiver._id === value
+      );
+
+      // Update the selectedReceiverData state based on whether the checkbox is checked or not
+      const updatedReceiverData = e.target.checked
+        ? [
+            ...prevState.receptorData,
+            {
+              billTo: `${selectedReceiver.firstName} ${selectedReceiver.lastName}`,
+              billToEmail: selectedReceiver.email,
+              receptorID: selectedReceiver._id,
+            },
+          ]
+        : prevState.receptorData.filter(
+            (data) => data.receptorID !== selectedReceiver._id
+          );
+
+      // Update the selectedReceiverData state
+      setSelectedReceiverData(updatedReceiverData);
+
+      // Extract receptorIDs from updatedReceiverData
+      const updatedReceptorIDs = updatedReceiverData.map(
+        (data) => data.receptorID
+      );
+
+      handleDropdownToggle(true, null, { source: "checkbox" });
+
+      return {
+        ...prevState,
+        receptorIDs: updatedReceptorIDs,
+        receptorData: updatedReceiverData,
+      };
     });
-  }
+  };
+
+  const dropdownCheckboxList = sortedInvoiceReceivers.map((receiver) => (
+    <Dropdown.Item key={receiver._id}>
+      <Form.Check
+        label={`${receiver.firstName} ${receiver.lastName}`}
+        value={receiver._id}
+        onChange={handleCheckboxChange}
+        checked={state.receptorIDs.includes(receiver._id)}
+      />
+    </Dropdown.Item>
+  ));
+
+  const handleSelectAll = () => {
+    const allCheckboxValues = sortedInvoiceReceivers.map(
+      (receiver) => receiver._id
+    );
+
+    // Check if all checkboxes are already selected
+    const allSelected = allCheckboxValues.every((value) =>
+      state.receptorIDs.includes(value)
+    );
+
+    // If all selected, unselect all; otherwise, select all
+    const updatedReceptorIDs = allSelected ? [] : allCheckboxValues;
+
+    const updatedReceiverData = updatedReceptorIDs.map((value) => {
+      const selectedReceiver = invoiceReceivers.find(
+        (receiver) => receiver._id === value
+      );
+      return {
+        billTo: `${selectedReceiver.firstName} ${selectedReceiver.lastName}`,
+        billToEmail: selectedReceiver.email,
+        receptorID: selectedReceiver._id,
+      };
+    });
+
+    setSelectedReceiverData((prevData) =>
+      allSelected
+        ? []
+        : updateSelectedReceiverData(prevData, updatedReceiverData)
+    );
+
+    setState((prevState) => ({
+      ...prevState,
+      receptorIDs: updatedReceptorIDs,
+      receptorData: updatedReceptorIDs.length === 0 ? [] : updatedReceiverData,
+    }));
+  };
+
+  // Helper function to update selectedReceiverData
+  const updateSelectedReceiverData = (prevData, newData) => {
+    // Assuming a unique key like 'receptorID'
+    const newDataKeys = new Set(newData.map((data) => data.receptorID));
+    const filteredPrevData = prevData.filter(
+      (data) => !newDataKeys.has(data.receptorID)
+    );
+
+    return [...filteredPrevData, ...newData];
+  };
 
   useEffect(() => {
     // Update the form input values with the selectedReceiverData
+    // Assuming selectedReceiverData is an array
+    const selectedData =
+      selectedReceiverData.length > 0 ? selectedReceiverData[0] : {};
+
     setState((prevFormState) => ({
       ...prevFormState,
-      billTo: selectedReceiverData.billTo,
-      billToEmail: selectedReceiverData.billToEmail,
-      receptorID: selectedReceiverData.receptorID,
+      billTo: selectedData.billTo || "",
+      billToEmail: selectedData.billToEmail || "",
+      receptorIDs: state.receptorIDs, // You may not want to overwrite this in every useEffect
     }));
+
     // Calculate total, etc.
     handeCalculateTotal(items);
   }, [selectedReceiverData, items]);
@@ -192,23 +246,32 @@ export default function InvoiceForm({
               <hr className="my-4" />
               <Row className="mb-5">
                 <Col>
-                  <Form.Label className="fw-bold" htmlFor="receptorOption">
+                  <Form.Label className="fw-bold" htmlFor="receptorOptions">
                     Receptor:
                   </Form.Label>
-                  <Form.Select
-                    aria-label="Default select example"
-                    id="receptorOption"
-                    onChange={handleSelectOption}
+                  <Dropdown onToggle={handleDropdownToggle} show={dropdownOpen}>
+                    <Dropdown.Toggle variant="secondary">
+                      Seleccionar receptor/es
+                    </Dropdown.Toggle>
+                    <Dropdown.Menu>{dropdownCheckboxList}</Dropdown.Menu>
+                  </Dropdown>
+                  <hr />
+                  <Button
+                    variant="primary"
+                    onClick={handleSelectAll}
+                    className=""
                   >
-                    <option>Selecciona un receptor:</option>
-                    {invoiceReceiverList}
-                  </Form.Select>
-                  <Form.Label className="fw-bold" htmlFor="receptorName">
-                    Nombre del receptor:
+                    Seleccionar Todos
+                  </Button>
+                  <hr />
+                  <Form.Label className="fw-bold my-2" htmlFor="receptorName">
+                    Nombres del/los receptor/es:
                   </Form.Label>
                   <Form.Control
                     placeholder="Ingresa un Nombre"
-                    value={state.billTo}
+                    value={selectedReceiverData
+                      .map((receiver) => receiver.billTo)
+                      .join(", ")}
                     type="text"
                     name="billTo"
                     className="my-2"
@@ -217,13 +280,15 @@ export default function InvoiceForm({
                     autoComplete="Nombre"
                     required={true}
                     id="receptorName"
-                  ></Form.Control>
-                  <Form.Label className="fw-bold" htmlFor="receptorEmail">
-                    E-mail del receptor:
+                  />
+                  <Form.Label className="fw-bold my-2" htmlFor="receptorEmail">
+                    E-mail/s del/los receptor/es:
                   </Form.Label>
                   <Form.Control
                     placeholder="Ingresa un Email"
-                    value={state.billToEmail}
+                    value={selectedReceiverData
+                      .map((receiver) => receiver.billToEmail)
+                      .join(", ")}
                     type="text"
                     name="billToEmail"
                     className="my-2"
@@ -236,14 +301,14 @@ export default function InvoiceForm({
                 </Col>
                 <Col>
                   <Form.Label className="fw-bold" htmlFor="transmitter">
-                    Nombre del Emisor:
+                    Emisor:
                   </Form.Label>
                   <Form.Control
                     placeholder="Ingresa un Nombre"
                     value={state.billFrom}
                     type="text"
                     name="billFrom"
-                    className="my-2"
+                    className="mb-2"
                     readOnly
                     disabled
                     autoComplete="Nombre"
