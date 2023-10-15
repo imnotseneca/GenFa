@@ -24,6 +24,8 @@ export default function Footer() {
             href="https://www.linkedin.com/in/bruno-corrao/"
             alt="linkedin-link"
             aria-label="Find more about Bruno Corrao at Linkedin"
+            target="_blank"
+            rel="noreferrer"
           >
             <TiSocialLinkedin size={28} style={{ color: "#fff" }} url="" />
           </a>
@@ -33,6 +35,8 @@ export default function Footer() {
             href="https://github.com/imnotseneca"
             alt="github-link"
             aria-label="Find more about Bruno Corrao at Github"
+            target="_blank"
+            rel="noreferrer"
           >
             <TiSocialGithub size={28} style={{ color: "#fff" }} url="" />
           </a>

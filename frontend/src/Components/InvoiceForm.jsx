@@ -50,6 +50,17 @@ export default function InvoiceForm({
 
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
+  //Sort algorithm to order names alphabetically
+  const sortedInvoiceReceivers = [...invoiceReceivers].sort((a, b) =>
+    `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
+  );
+
+  //It will store a boolean value. If true, all receptors are selected from the checkbox.
+
+  const areAllSelected = sortedInvoiceReceivers
+    .map((receiver) => receiver._id)
+    .every((value) => state.receptorIDs.includes(value));
+
   const handleDropdownToggle = (isOpen, event, metadata) => {
     // If the toggle event was triggered by a checkbox, keep the dropdown open
     if (metadata && metadata.source === "checkbox") {
@@ -93,16 +104,10 @@ export default function InvoiceForm({
     }));
   };
 
-  const sortedInvoiceReceivers = [...invoiceReceivers].sort((a, b) =>
-    `${a.firstName} ${a.lastName}`.localeCompare(`${b.firstName} ${b.lastName}`)
-  );
-
   const handleCheckboxChange = (e) => {
     const { value } = e.target;
 
     setState((prevState) => {
-      // ... (your existing code)
-
       // Find the selected receiver data based on the clicked checkbox
       const selectedReceiver = invoiceReceivers.find(
         (receiver) => receiver._id === value
@@ -244,14 +249,14 @@ export default function InvoiceForm({
                 </div>
               </div>
               <hr className="my-4" />
-              <Row className="mb-5">
+              <Container className="mb-5 flex-direction-column">
                 <Col>
                   <Form.Label className="fw-bold" htmlFor="receptorOptions">
                     Receptor:
                   </Form.Label>
                   <Dropdown onToggle={handleDropdownToggle} show={dropdownOpen}>
                     <Dropdown.Toggle variant="secondary">
-                      Seleccionar receptor/es
+                      {`Seleccionar receptor/es (${state.receptorData.length})`}
                     </Dropdown.Toggle>
                     <Dropdown.Menu>{dropdownCheckboxList}</Dropdown.Menu>
                   </Dropdown>
@@ -261,7 +266,9 @@ export default function InvoiceForm({
                     onClick={handleSelectAll}
                     className=""
                   >
-                    Seleccionar Todos
+                    {areAllSelected === true
+                      ? `Deseleccionar todos`
+                      : `Seleccionar todos`}
                   </Button>
                   <hr />
                   <Form.Label className="fw-bold my-2" htmlFor="receptorName">
@@ -316,7 +323,7 @@ export default function InvoiceForm({
                     id="transmitter"
                   ></Form.Control>
                 </Col>
-              </Row>
+              </Container>
               <InvoiceItem
                 items={items}
                 onItemizedItemEdit={onItemizedItemEdit}
